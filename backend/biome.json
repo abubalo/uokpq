@@ -1,0 +1,42 @@
+{
+    "$schema": "https://biomejs.dev/schema.json",
+    "files": {
+      "ignore": ["node_modules", "dist"]
+    },
+    "formatter": {
+      "enabled": true,
+      "options": {
+        "lineWidth": 80,
+        "indentStyle": "space",
+        "indentSize": 2,
+        "quoteStyle": "single",
+        "trailingComma": "all",
+        "semicolons": true
+      }
+    },
+    "linter": {
+      "enabled": true,
+      "rules": {
+        "recommended": true,
+        "@typescript-eslint/explicit-function-return-type": "off",
+        "@typescript-eslint/no-explicit-any": "warn"
+      }
+    },
+    "typescript": {
+      "enabled": true,
+      "compilerOptions": {
+        "target": "ES6",
+        "module": "commonjs",
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "outDir": "./dist",
+        "rootDir": "./src",
+        "resolveJsonModule": true,
+        "typeRoots": ["./node_modules/@types"],
+        "sourceMap": true
+      }
+    }
+  }
+  
