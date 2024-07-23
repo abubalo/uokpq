@@ -25,7 +25,7 @@ export async function isAuthenticated(
     return;
   }
 
-  const { data: user, errorMessage } = await verifyJwtToken(token);
+  const { value: user, errorMessage } = await verifyJwtToken(token);
 
   if (!user) {
     res.status(401).json({ error: errorMessage || 'Invalid token!' });
