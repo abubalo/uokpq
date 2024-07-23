@@ -10,6 +10,7 @@ import {
   searchPapers,
   updatePaper,
 } from '../../controllers/paper.controler';
+import { toogleBookmark } from '@/api/models/paper.model';
 
 const router = Router();
 
@@ -17,7 +18,7 @@ router.post('/add', isAuthenticated, isAuthorized, addPapper);
 router.get('/papers', getPapers);
 router.get('/paper:id', getPaperById);
 router.post('/search', searchPapers);
-router.post('/bookmark', isAuthenticated, isAuthorized);
+router.post('/bookmark', isAuthenticated, isAuthorized, toogleBookmark);
 router.get('/bookmarks', isAuthenticated, isAuthorized, getBookmarksByUser);
 router.put('/update:id', isAuthenticated, isAuthorized, updatePaper);
 router.delete('/delete:id', isAuthenticated, isAuthorized, deletePaper);
