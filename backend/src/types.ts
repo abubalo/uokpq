@@ -28,6 +28,7 @@ export type Paper = {
   title: string;
   filePath: string;
   year: number;
+  courseId: string;
   moduleId: string;
   trimesterId: string;
   lecturerName: string;
@@ -35,6 +36,7 @@ export type Paper = {
   updatedAt: number;
   uploaderId: string;
   isArchive: boolean;
+  tags: string[];
 };
 
 export interface SearchParams {
@@ -92,13 +94,13 @@ declare global {
       NODE_ENV: 'development' | 'production' | 'test';
       DATABASE_URL: string;
       JWT_SECRET: string;
-      SERVER_PORT: number;
-      SESSION_MAX_AGE: number;
+      SERVER_PORT: string;
+      SESSION_MAX_AGE: string;
       DB_USERNAME: string;
       DB_HOST: string;
       DB_NAME: string;
       DB_PASSWORD: string;
-      DB_PORT: number;
+      DB_PORT: string;
       REDIS_UPSTACH_URL: string;
       REDIS_HOST: string;
       REDIS_PORT: string;
