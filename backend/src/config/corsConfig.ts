@@ -1,16 +1,13 @@
-import { CorsOptions, CorsRequest } from 'cors';
+import { CorsOptions } from 'cors';
 
 export const corsOptions: CorsOptions = {
-  origin: function (
-    origin: string | undefined,
-    callback: (error: Error | null, allow?: boolean) => void
-  ) {
+  origin: (origin, callback) => {
     const allowedOrigins: string[] = [
       'http://localhost:5371',
-      'https://www.uokpq.vercel.app',
+      'https://uokpq.vercel.app',
       'https://www.uokpq.com',
     ];
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+    if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
