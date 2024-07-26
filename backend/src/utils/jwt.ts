@@ -1,4 +1,3 @@
-import { env } from '@config/env';
 import * as jwt from 'jsonwebtoken';
 import { User, ResponseData } from '../types';
 import { getUserById } from '@/api/models/user.model';
@@ -24,7 +23,9 @@ export async function verifyJwtToken(
   token: string
 ): Promise<ResponseData<User>> {
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET) as { sub: string };
+    const decoded = jwt.verify(token, process.env.JWT_SECRET) as {
+      sub: string;
+    };
     const userId = decoded.sub;
 
     const user = await getUserById(userId);
