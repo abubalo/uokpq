@@ -20,12 +20,13 @@ export const addPaper = async (paper: Paper): Promise<Paper | null> => {
       );
     }
 
-    const query = `INSERT INTO papers (title, file_path, year, module_id, trimester_id, lecturer_name, uploader_id, is_archive=FALSE ) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`;
+    const query = `INSERT INTO papers (title, file_path, year, course_id, module_id, trimester_id, lecturer_name, uploader_id,  ) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`;
 
     const values = [
       paper.title,
       paper.filePath,
       paper.year,
+      paper.courseId,
       paper.moduleId,
       paper.trimesterId,
       paper.lecturerName,
@@ -103,6 +104,17 @@ export const searchPapers = async (
       sortBy = 'uploaded_at',
       sortOrder = 'desc',
     } = params;
+
+    client.query(`
+      CREATE INDEX papers_title_idx ON papers USING gin (title gin_trgm_ops);
+      CREATE INDEX papers_lecturer_name_idx ON papers USING gin (lecturer_name gin_trgm_ops);
+      CREATE INDEX papers_year_idx ON papers (year);
+      CREATE INDEX papers_course_id_idx ON papers (course_id);
+      CREATE INDEX papers_module_id_idx ON papers (module_id);
+      CREATE INDEX papers_trimester_idx ON papers (trimester);
+      CREATE INDEX papertags_paper_id_idx ON paperTags (paper_id);
+      CREATE INDEX papertags_tag_id_idx ON paperTags (tag_id);
+      `);
 
     let sqlQuery = `
       SELECT DISTINCT p.* 
