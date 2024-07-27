@@ -8,7 +8,6 @@ import {
 import { Request, Response } from 'express';
 import * as userModel from '../models/user.model';
 import { generateJwtToken } from '@/utils/jwt';
-import { env } from '@/config/env';
 import { DatabaseError } from 'pg';
 
 const handleSuccess = <T>(res: Response, data: T, statusCode: number = 200) => {
@@ -39,7 +38,16 @@ export async function addUser(req: Request, res: Response): Promise<void> {
 
     const newUser = await userModel.createUser(user);
 
-    return handleSuccess(res, { data: newUser }, 201);
+    const token = await generateJwtToken(newUser);
+
+    res
+      .cookie('Bearer', token, {
+        maxAge: parseInt(process.env.SESSION_MAX_AGE),
+        httpOnly: true,
+        secure: process.env.NODE_ENV == 'production',
+        sameSite: 'strict',
+      })
+      .status(201);
   } catch (error) {
     console.error('Error adding user:', error);
     if (error instanceof DatabaseError) {
@@ -72,9 +80,9 @@ export async function loginUser(req: Request, res: Response): Promise<void> {
 
     res
       .cookie('Bearer', token, {
-        maxAge: process.env.SESSION_MAX_AGE,
+        maxAge: parseInt(process.env.SESSION_MAX_AGE),
         httpOnly: true,
-        secure: process.env.NODE_ENV == "production",
+        secure: process.env.NODE_ENV == 'production',
         sameSite: 'strict',
       })
       .json({ data: user, message: 'Successfuly logged in!' });
@@ -91,7 +99,7 @@ export async function logoutUser(_: Request, res: Response) {
   try {
     res.clearCookie('Bearer', {
       httpOnly: true,
-      secure: process.env.NODE_ENV == "production",
+      secure: process.env.NODE_ENV == 'production',
       sameSite: 'strict',
     });
 
