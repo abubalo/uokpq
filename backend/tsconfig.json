@@ -17,9 +17,10 @@
       "@/*": ["src/*"],
       "@config/*": ["src/config/*"],
       "@utils/*": ["src/utils/*"],
-      "@auth/*": ["src/utils/helpers/*"],
-      "@lib/*": ["src/lib/*"],
-      "@type/*": ["src/types/chimoney.d.ts"]
+      "@events/*": ["src/events/*"],
+      "@jobs/*": ["src/jobs/*"],
+      "@tests/*": ["src/tests/*"],
+      "@validators/*": ["src/validators/*"],
     },
     "allowSyntheticDefaultImports": true,
     "strictNullChecks": true,
