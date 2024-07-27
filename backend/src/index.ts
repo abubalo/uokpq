@@ -6,7 +6,7 @@ import helmet from 'helmet';
 import cors from 'cors';
 import httpLogger from './api/middleware/httpLogger';
 import { errorHandler } from './api/middleware/errorHandler';
-import { authLimiter } from './api/middleware/limiter';
+import { apiRateLimiter, authLimiter } from './api/middleware/limiter';
 import cookieParser from 'cookie-parser';
 import userRoutes from './api/routes/v1/user.routes';
 import paperRoutes from './api/routes/v1/paper.routes';
@@ -62,9 +62,9 @@ app.use(httpLogger);
 app.use(errorHandler);
 app.use(authLimiter);
 
-app.use('/user', userRoutes);
-app.use('/papers', paperRoutes);
-app.use('/admin', adminRoutes);
+app.use('/api/v1/users', userRoutes);
+app.use('/api/v1papers', apiRateLimiter, paperRoutes);
+app.use('/api/v1/admin', apiRateLimiter, adminRoutes);
 
 app.listen(process.env.SERVER_PORT, () => {
   Logging.log(`Server is running on localhost:${process.env.SERVER_PORT}`);
