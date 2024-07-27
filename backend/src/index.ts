@@ -63,7 +63,7 @@ app.use(errorHandler);
 app.use(authLimiter);
 
 app.use('/api/v1/users', userRoutes);
-app.use('/api/v1papers', apiRateLimiter, paperRoutes);
+app.use('/api/v1/papers', apiRateLimiter, paperRoutes);
 app.use('/api/v1/admin', apiRateLimiter, adminRoutes);
 
 app.listen(process.env.SERVER_PORT, () => {
