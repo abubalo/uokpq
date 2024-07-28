@@ -211,7 +211,7 @@ export const isEmailExist = async (email: string): Promise<boolean> => {
   const client = getClient();
   try {
     const result = await client.query<{ exists: boolean }>(
-      'SELECT EXISTS(1 FROM users WHERE email = $1)',
+      'SELECT EXISTS( SELECT 1 FROM users WHERE email = $1)',
       [email]
     );
     return result.rows[0].exists;
