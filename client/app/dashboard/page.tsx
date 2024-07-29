@@ -2,7 +2,7 @@ import Sidebar from "@/components/dashboard/Sidebar";
 import Button from "@/components/ui/button/Button";
 import Link from "next/link";
 import React from "react";
-import Table from "./Table";
+import Table from "../../components/dashboard/Table";
 
 const Dashboard = () => {
   const data = [
