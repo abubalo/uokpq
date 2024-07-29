@@ -82,7 +82,7 @@ const AdvanceSearchOption: React.FC<Props> = ({ showAdvanceOptions }) => {
             onChange={setHasWords}
           />
 
-          <div className="flex items-center w-full gap-3">
+          {/* <div className="flex items-center w-full gap-3">
             <label className="text-sm text-nowrap">Size</label>
             <div className="flex items-center justify-between w-full gap-3">
               <Dropdown label={"Select Module Type"} className="text-nowrap">
@@ -100,7 +100,7 @@ const AdvanceSearchOption: React.FC<Props> = ({ showAdvanceOptions }) => {
                 onChange={(e) => setSize(e.target.value)}
               />
             </div>
-          </div>
+          </div> */}
 
           <div className="flex justify-end gap-4">
             <Button
