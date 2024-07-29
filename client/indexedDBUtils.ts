@@ -23,7 +23,7 @@ const openDB = () => {
   });
 };
 
-const getPDF = async (id: string) => {
+export const getPDF = async (id: string) => {
   const db = await openDB();
 
   return new Promise<Blob | null>((resolve, reject) => {
@@ -41,7 +41,7 @@ const getPDF = async (id: string) => {
   });
 };
 
-const savePDF = async (id: string, blob: Blob) => {
+export const savePDF = async (id: string, blob: Blob) => {
   const db = await openDB();
   return new Promise<void>((resolve, reject) => {
     const transaction = db.transaction(STORE_NAME, "readwrite");
