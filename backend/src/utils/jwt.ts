@@ -1,12 +1,13 @@
 import * as jwt from 'jsonwebtoken';
 import { User, ResponseData } from '../types';
 import { getUserById } from '@/api/models/user.model';
+import { env } from '@/config/env';
 
 export async function generateJwtToken(user: Partial<User>): Promise<string> {
   try {
     const payload = {
       sub: user.id,
-      iat: Math.floor(Date.now() / 1000),
+      iat: Math.floor(Date.now() / 1000)
     };
 
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
