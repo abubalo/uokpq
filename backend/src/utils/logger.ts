@@ -2,7 +2,7 @@ import { env } from '@/config/env';
 import winston from 'winston';
 import DailyRotateFile from 'winston-daily-rotate-file';
 
-const level = env.LOG_LEVEL || 'info';
+const level = process.env.LOG_LEVEL || 'info';
 
 const logger = winston.createLogger({
   level: level,
