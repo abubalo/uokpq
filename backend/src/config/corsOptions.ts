@@ -3,7 +3,7 @@ import { CorsOptions } from 'cors';
 export const corsOptions: CorsOptions = {
   origin: (origin, callback) => {
     const allowedOrigins: string[] = [
-      'http://localhost:5371',
+      'http://localhost:3000',
       'https://uokpq.vercel.app',
       'https://www.uokpq.com',
     ];
