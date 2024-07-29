@@ -11,7 +11,6 @@ const userSchema = Joi.object({
   profileImage: Joi.string().optional(),
   createAt: Joi.string().optional(),
   updatedAt: Joi.string().optional(),
-  isAdmin: Joi.boolean().required(),
 });
 
 export const validateUser = (user: Partial<User>): Joi.ValidationResult => {
