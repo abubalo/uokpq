@@ -2,33 +2,33 @@
 import React, { useEffect, useState } from "react";
 import NotFound from "../../../components/ui/not-found";
 import axios from "axios";
+import { getPDF, savePDF } from "@/indexedDBUtils";
 
 type Props = {
   params: {
-    paperId?: string;
+    paperUrl?: string;
   };
 };
 
-const Papers = ({ params: { paperId } }: Props) => {
+const Papers = ({ params: { paperUrl } }: Props) => {
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchPDF = async () => {
-      if (!paperId) return;
+      if (!paperUrl) return;
       try {
-        const cachePdf = await getPDF(paperId);
-
+        const cachePdf = await getPDF(paperUrl);
         if (cachePdf) {
           setPdfUrl(URL.createObjectURL(cachePdf));
         } else {
           const response = await axios.get<Blob>(
-            `https://uokpq.com/papers/e/${paperId}.pdf`,
+            `https://uokpq.com/papers/e/${paperUrl}.pdf`,
             { responseType: "blob" }
           );
 
           const blob = response.data;
           const reader = new FileReader();
-          await savePDF(paperId, blob);
+          await savePDF(paperUrl, blob);
           setPdfUrl(URL.createObjectURL(blob));
 
           reader.onload = (e) => setPdfUrl(e.target?.result as string);
@@ -41,24 +41,23 @@ const Papers = ({ params: { paperId } }: Props) => {
     };
 
     fetchPDF();
-  }, [paperId]);
+  }, [paperUrl]);
 
-  if (!paperId) {
+  if (!paperUrl) {
     return NotFound();
   }
 
   return (
-    <div className="conatiner mx-auto h-dvh">
-      <div className="">
+    <main className="h-screen ">
+      <div className="relative w-full h-full max-w-full max-h-full">
         <embed
-          src={pdfUrl ?? "/pdfs/mapreduce-osdi04.pdf"}
+          src={pdfUrl ?? "/pdfs/1984.pdf"}
           type="application/pdf"
-          width="100%"
-          height="500"
-          className="w-full h-dvh"
+          className="w-full h-full"
+          style={{ height: "calc(100vh - 0px)" }} // Adjust height as needed
         ></embed>
       </div>
-    </div>
+    </main>
   );
 };
 
