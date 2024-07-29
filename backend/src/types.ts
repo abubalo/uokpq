@@ -84,6 +84,7 @@ declare global {
       userId?: string | number;
       user?: User;
       apiVersion?: string;
+      fileUrl?: string;
     }
   }
 }
