@@ -4,11 +4,15 @@ import type { NextRequest } from "next/server";
 export function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
-  const isPublicPath = ["/login", "/signup", "/papers", "/"].some(
+  const isPublicPath = ["/login", "/signup", "/paper", "/"].some(
     (publicPath) => path.startsWith(publicPath)
   );
 
   const token = request.cookies.get("Bearer")?.value || "";
+
+  console.log("Path:", path);
+  console.log("Token:", token);
+  console.log("isPublicPath:", isPublicPath);
 
   if (isPublicPath && token) {
     return NextResponse.redirect(new URL("/dashboard", request.nextUrl));
@@ -26,7 +30,8 @@ export const config = {
     "/",
     "/login",
     "/signup",
-    "/papers",
+    "/reset-password",
+    "/paper/:path*",
     "/dashboard/:path*",
     "/profile/:path*",
   ],
