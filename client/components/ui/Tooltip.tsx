@@ -123,7 +123,7 @@ const ToolTip: React.FC<Props> = ({
             ref={tooltipRef}
             className={`
               absolute z-20 text-[12px] font-medium text-white bg-gray-900 rounded-md shadow-sm
-              transition-opacity duration-300 pointer-events-none select-none
+              transition-opacity duration-300 pointer-events-none select-none text-nowrap
             `}
             style={{
               top: tooltipPosition.top,
