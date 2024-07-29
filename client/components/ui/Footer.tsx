@@ -10,29 +10,13 @@ const Footer = () => {
       <div>
         <ul className="flex gap-6">
           <li>
-            <Link href="" target="_blank">
-              Home
-            </Link>
+            <Link href="#">About</Link>
           </li>
           <li>
-            <Link href="" target="_blank">
-              Home
-            </Link>
+            <Link href="#">Contact</Link>
           </li>
           <li>
-            <Link href="" target="_blank">
-              Home
-            </Link>
-          </li>
-          <li>
-            <Link href="" target="_blank">
-              Home
-            </Link>
-          </li>
-          <li>
-            <Link href="" target="_blank">
-              Home
-            </Link>
+            <Link href="#">Help</Link>
           </li>
         </ul>
       </div>
