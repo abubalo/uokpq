@@ -18,45 +18,49 @@ const handleFailure = <T>(res: Response, data: T, statusCode: number) => {
   res.status(statusCode).json(data);
 };
 
+// Adjust import path accordingly
+
+const SESSION_MAX_AGE = parseInt(env.SESSION_MAX_AGE);
+
 export async function addUser(req: Request, res: Response): Promise<void> {
   try {
     const user: User = req.body;
     const { error } = validateUser(user);
 
     if (error) {
-      return handleFailure(
-        res,
-        { error: error.details.map((d) => d.message).join(', ') },
-        422
-      );
+      const errorMessage = error.details.map((d) => d.message).join(', ');
+      return handleFailure(res, { error: errorMessage }, 422);
     }
 
     const isEmailTaken = await userModel.isEmailExist(user.email);
 
     if (isEmailTaken) {
-      return handleFailure(res, { error: 'Email already exist' }, 409);
+      return handleFailure(res, { error: 'Email already exists' }, 409);
     }
 
     const newUser = await userModel.createUser(user);
-
     const token = await generateJwtToken(newUser);
 
     res
       .cookie('Bearer', token, {
-        maxAge: parseInt(env.SESSION_MAX_AGE),
+        maxAge: SESSION_MAX_AGE,
         httpOnly: true,
-        secure: env.NODE_ENV == 'production',
+        secure: env.NODE_ENV === 'production',
+        path: "/",
         sameSite: 'strict',
       })
-      .status(201).json({data: newUser});
+      .status(201)
+      .json({ data: newUser });
   } catch (error) {
     console.error('Error adding user:', error);
-    if (error instanceof DatabaseError) {
-      return handleFailure(res, { error: 'Database error occurred' }, 500);
-    }
-    return handleFailure(res, { error: 'Internal server error' }, 500);
+    const errorMessage =
+      error instanceof DatabaseError
+        ? 'Database error occurred'
+        : 'Internal server error';
+    return handleFailure(res, { error: errorMessage }, 500);
   }
 }
+
 export async function loginUser(req: Request, res: Response): Promise<void> {
   try {
     const { email, password } = req.body;
