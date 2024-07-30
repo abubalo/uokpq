@@ -12,7 +12,7 @@ const Papers = () => {
           lecturer="Turimukuza Maurice"
           date="17th July 2024"
           url="066daa3096def8afb1ea91adc77d1f"
-          tags={["Computer sci.","BBIT", "BIT"]}
+          tags={["Computer sci.", "BBIT", "BIT"]}
           bookmarked={true}
         />
         <PaperCard
@@ -22,7 +22,7 @@ const Papers = () => {
           lecturer="Merci Nyankundi"
           date="13th June 2024"
           url="c3c7c86871ada5c3d464d983034440"
-          tags={["josh", "eje"]}
+          tags={["Mathematics", "Computer Sci.", "BIT"]}
           bookmarked={true}
         />
         <PaperCard
@@ -32,7 +32,7 @@ const Papers = () => {
           lecturer="Temitoyo"
           date="2nd Fed 2024"
           url="29152d9029e88a9a68afb1f26d86b0"
-          tags={["josh", "eje"]}
+          tags={["General", "Computer sci", "BIT", "BBIT"]}
           bookmarked={false}
         />
         <PaperCard
@@ -42,7 +42,7 @@ const Papers = () => {
           lecturer="Valens"
           date="09th March 2024"
           url="51e325e6e72e54b84b9972172398f4"
-          tags={["josh", "eje"]}
+          tags={["General", "Computer sci", "BIT", "BBIT"]}
           bookmarked={false}
         />
         <PaperCard
@@ -52,7 +52,7 @@ const Papers = () => {
           lecturer="Valens"
           date="09th March 2024"
           url="51e325e6e72e54b84b9972172398f4"
-          tags={["josh", "eje"]}
+          tags={["Computer sci", "BIT"]}
           bookmarked={true}
         />
         <PaperCard
@@ -62,7 +62,7 @@ const Papers = () => {
           lecturer="Valens"
           date="09th March 2024"
           url="51e325e6e72e54b84b9972172398f4"
-          tags={["josh", "eje"]}
+          tags={["Mathematics", "Computer sci", "BIT"]}
           bookmarked={false}
         />
       </div>
