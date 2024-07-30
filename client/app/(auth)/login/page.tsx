@@ -96,7 +96,7 @@ const Login: React.FC = () => {
               <span className="text-sm ml-2">Remember me</span>
             </label>
             <Link
-              href="#"
+              href="/reset-password"
               className="text-blue-500 text-sm font-semibold hover:underline"
             >
               Forgot password?
