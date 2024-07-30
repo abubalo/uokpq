@@ -13,40 +13,45 @@ type Props = {
 
 const AdvanceSearchOption: React.FC<Props> = ({ showAdvanceOptions }) => {
   const {
-    from,
-    to,
-    subject,
-    hasWords,
-    setFrom,
-    setTo,
-    setSize,
-    setSubject,
-    setHasWords,
+    moduleName,
+    taughtBy,
+    department,
+    trimester,
+    date,
+    modulesCode,
+    containsWords,
+    session,
+    paperType,
+    setModuleName,
+    setTaugtBy,
+    setDepartment,
+    setTrimester,
+    setDate,
+    setModulesCode,
+    setContainsWords,
+    setSession,
+    setPaperType,
   } = useAdvanceSearchStore();
 
-  const sizeOptions = [
-    { label: "Larger than", value: "larger" },
-    { label: "Smaller than", value: "smaller" },
-  ];
-
-  const byteOptions = [
-    { label: "MB", value: "megabyte" },
-    { label: "KB", value: "kilobyte" },
-    { label: "B", value: "byte" },
-  ];
-  const withinDate = [
-    { label: "1 day", value: "megabyte" },
-    { label: "KB", value: "kilobyte" },
-    { label: "B", value: "byte" },
-  ];
-  const moduleType = [
-    { label: "Exam", value: "exam" },
-    { label: "CAT", value: "cat" },
-  ];
   const moduleSession = [
     { label: "Day", value: "day" },
     { label: "Weekend", value: "weekend" },
   ];
+  const paperTypes = [
+    { label: "Exam", value: "exam" },
+    { label: "Cat", value: "cat" },
+  ];
+
+  const handleCreateFilter = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+    console.log("Filter created!");
+  };
+  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+    console.log("Form submitted!");
+  };
 
   return (
     <AnimatePresence>
@@ -58,29 +63,43 @@ const AdvanceSearchOption: React.FC<Props> = ({ showAdvanceOptions }) => {
           transition={{ ease: "easeInOut", duration: 0.3 }}
           className="absolute z-50 w-full p-6 space-y-4 bg-black border rounded-md font-semibold"
         >
-          <OptionsInput name="Module name:" value={from} onChange={setFrom} />
-          <OptionsInput name="Taught by:" value={to} onChange={setTo} />
+          <OptionsInput
+            name="Module name:"
+            value={moduleName}
+            onChange={setModuleName}
+          />
+          <OptionsInput
+            name="Taught by:"
+            value={taughtBy}
+            onChange={setTaugtBy}
+          />
           <OptionsInput
             name="Department:"
-            value={subject}
-            onChange={setSubject}
+            value={department}
+            onChange={setDepartment}
+          />
+          <OptionsInput
+            name="Paper type:"
+            value={paperType}
+            onChange={setPaperType}
           />
           <OptionsInput
             name="Trimester:"
-            value={hasWords}
-            onChange={setHasWords}
+            value={trimester}
+            onChange={setTrimester}
           />
-          <OptionsInput name="Year:" value={hasWords} onChange={setHasWords} />
+          <OptionsInput name="Date:" value={date} onChange={setDate} />
           <OptionsInput
             name="Module Code:"
-            value={hasWords}
-            onChange={setHasWords}
+            value={modulesCode}
+            onChange={setModulesCode}
           />
           <OptionsInput
             name="Contains words:"
-            value={hasWords}
-            onChange={setHasWords}
+            value={containsWords}
+            onChange={setContainsWords}
           />
+          <OptionsInput name="Session:" value={session} onChange={setSession} />
 
           {/* <div className="flex items-center w-full gap-3">
             <label className="text-sm text-nowrap">Size</label>
@@ -106,13 +125,13 @@ const AdvanceSearchOption: React.FC<Props> = ({ showAdvanceOptions }) => {
             <Button
               type="button"
               className="px-4 py-2 font-medium bg-transparent border rounded-lg w-max"
-              onClick={() => console.log("Filter created")}
+              onClick={handleCreateFilter}
             >
               Create filter
             </Button>
             <Button
               className="px-4 py-2 font-medium rounded-lg w-max"
-              onClick={() => console.log("Form submitted")}
+              onClick={handleSubmit}
             >
               Search
             </Button>
