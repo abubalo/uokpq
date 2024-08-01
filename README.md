@@ -1,3 +1,5 @@
+# UokPQs
+
 UoKPQ (University of Kigali Past Questions) is an academic paper management system that contains a neatly structured database of past exam questions. It addresses the challenges students face in quickly and easily finding the right past exams and Continuous Assessment Test (CAT) questions. 
 
 Currently, when a student needs to access past questions for a certain module, they have three main options:
