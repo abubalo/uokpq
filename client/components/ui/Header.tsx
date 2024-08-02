@@ -47,19 +47,13 @@ const Header = () => {
   const user = true;
 
   return (
-    <header className="sticky top-0 z-50 bg-white dark:bg-gray-900">
-      <nav className="container hidden mx-auto px-4 py-3 md:block">
+    <header className="conainer mx-auto sticky top-0 z-50 ">
+      <nav className="hidden px-4 py-3 md:block bg-neutral-800/70 backdrop-blur-md border-b border-gray-200/30">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <Link href="/" aria-label="Home">
-              <Image
-                src="/uokpq.svg"
-                alt="uokpq logo"
-                width={100}
-                height={100}
-                className="w-10 h-10"
-              />
+            <Link href="/" aria-label="webiste logo">
+              <Image src="/uokpq.svg" alt="uokpq logo" width={80} height={80} />
             </Link>
           </div>
 
@@ -118,13 +112,19 @@ const Header = () => {
             <div className="relative min-h-dvh font-semibold">
               <ul className="absolute inset-0 w-full p-4 space-y-4 z-50 bg-white dark:bg-gray-900">
                 <li className="py-2 border-b">
-                  <Link href="/bookmarks" aria-label="Bookmarks">Bookmarks</Link>
+                  <Link href="/bookmarks" aria-label="Bookmarks">
+                    Bookmarks
+                  </Link>
                 </li>
                 <li className="py-2 border-b">
-                  <Link href="/profile" aria-label="Profile">Profile</Link>
+                  <Link href="/profile" aria-label="Profile">
+                    Profile
+                  </Link>
                 </li>
                 <li className="py-2 border-b">
-                  <Link href="/help" aria-label="Help">Help</Link>
+                  <Link href="/help" aria-label="Help">
+                    Help
+                  </Link>
                 </li>
                 <li className="py-2 border-b">
                   <button
@@ -150,4 +150,4 @@ const Header = () => {
   );
 };
 
-export default Header
+export default Header;
