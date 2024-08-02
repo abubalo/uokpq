@@ -16,7 +16,7 @@ const router = Router();
 
 router.post('/create', addUser);
 router.post('/login', loginUser);
-router.get('/user:id', isAuthenticated, isAuthorized, getUserById);
+router.get('/:id', isAuthenticated, isAuthorized, getUserById);
 router.get('/', isAuthenticated, isAuthorized, userRole('admin'), getUsers);
 router.get('/loguot', isAuthenticated, isAuthorized, logoutUser);
 router.put('/update:id', isAuthenticated, isAuthorized, updateUser);
