@@ -45,7 +45,7 @@ const MobileSearch: React.FC<SearchProps> = ({
           placeholder="Search papers..."
           value={searchQuery}
           onChange={handleInputChange}
-          className="w-full py-3 pl-10 pr-12 text-sm font-semibold transition duration-150 ease-in-out bg-transparent border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-transparent placeholder:text-gray-400 dark:bg-transparent dark:border-gray-700 dark:text-white dark:placeholder:text-gray-500 dark:focus-within:bg-gray-800"
+          className="w-full py-3 pl-10 pr-12 text-sm font-semibold transition duration-150 ease-in-out bg-transparent border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-transparent placeholder:text-gray-400 dark:bg-transparent dark:border-gray-500 dark:text-white dark:placeholder:text-gray-500 dark:focus-within:bg-gray-800"
         />
         <button onClick={onOpen} className="absolute inset-y-0 left-0 text-gray-800 flex items-center pl-3 dark:text-gray-200">
           <IoMenuSharp size={24} />
