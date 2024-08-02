@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useEffect, useRef, useState } from "react";
 import { SearchOptions } from "../../shared/Icons";
 import ToolTip from "../Tooltip";
@@ -32,14 +32,17 @@ const Search: React.FC<SearchProps> = ({ searchQuery, onSearchChange }) => {
   };
 
   return (
-    <div ref={containerRef} className="relative hidden w-full max-w-2xl md:block">
+    <div
+      ref={containerRef}
+      className="relative hidden w-full max-w-2xl md:block"
+    >
       <div className="relative flex items-center">
         <input
           type="text"
           placeholder="Search papers..."
           value={searchQuery}
           onChange={handleInputChange}
-          className="w-full py-3 pl-10 pr-12 text-sm transition duration-150 ease-in-out bg-transparent border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-400 dark:bg-transparent dark:border-gray-700 dark:text-white dark:placeholder:text-gray-500 dark:focus-within:bg-gray-800"
+          className="w-full py-3 pl-10 pr-12 text-sm transition duration-150 ease-in-out bg-transparent border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-400 dark:bg-transparent dark:border-gray-400 dark:text-white dark:placeholder:text-gray-200 dark:focus-within:bg-gray-800"
         />
         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
           <svg
@@ -55,17 +58,15 @@ const Search: React.FC<SearchProps> = ({ searchQuery, onSearchChange }) => {
           </svg>
         </div>
         <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-          {showAdvanceOptions ? null : (
-            <ToolTip text="Show options">
-              <button
-                type="button"
-                className="p-1 text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 "
-                onClick={() => setShowAdvanceOptions(true)}
-              >
-                <SearchOptions className="w-5 h-5" />
-              </button>
-            </ToolTip>
-          )}
+          <ToolTip text="Show options">
+            <button
+              type="button"
+              className="p-1 text-gray-400 rounded-full hover:text-gray-500 focus:outline-none "
+              onClick={() => setShowAdvanceOptions(true)}
+            >
+              <SearchOptions className="w-5 h-5" />
+            </button>
+          </ToolTip>
         </div>
       </div>
       <AdvanceSearchOption showAdvanceOptions={showAdvanceOptions} />
