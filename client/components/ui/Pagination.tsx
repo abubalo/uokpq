@@ -1,19 +1,21 @@
 "use client";
-
 import React, { useState, useEffect } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import { MdArrowBackIosNew, MdArrowForwardIos } from "react-icons/md";
 
 type Props = {
   totalPages: number;
-  fetchData: (page: number) => void;
+  fetchData: (page: number) => Promise<void>;
 };
 
 const Pagination: React.FC<Props> = ({ totalPages, fetchData }) => {
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    fetchData(currentPage);
+    const fetchPageData = async () => {
+      await fetchData(currentPage);
+    };
+    fetchPageData();
   }, [currentPage, fetchData]);
 
   const handleClick = (page: number) => {
@@ -45,14 +47,17 @@ const Pagination: React.FC<Props> = ({ totalPages, fetchData }) => {
         <button
           key={1}
           onClick={() => handleClick(1)}
-          className="px-4 py-2 rounded-md bg-gray-300 text-gray-700"
+          className="px-3 py-1 rounded-md bg-gray-300 text-gray-700"
         >
           1
         </button>
       );
       if (startPage > 2) {
         pages.push(
-          <span key="start-ellipsis" className="px-4 py-2 border rounded-md">
+          <span
+            key="start-ellipsis"
+            className="hidden: px-3 py-1 md:flex items-center border rounded-md"
+          >
             <BsThreeDots />
           </span>
         );
@@ -64,7 +69,7 @@ const Pagination: React.FC<Props> = ({ totalPages, fetchData }) => {
         <button
           key={i}
           onClick={() => handleClick(i)}
-          className={`px-4 py-2 rounded-md ${
+          className={`px-3 py-1 rounded-md ${
             currentPage === i
               ? "bg-gray-700 text-white"
               : "bg-gray-300 text-gray-700"
@@ -78,7 +83,10 @@ const Pagination: React.FC<Props> = ({ totalPages, fetchData }) => {
     if (endPage < totalPages) {
       if (endPage < totalPages - 1) {
         pages.push(
-          <span key="end-ellipsis" className="px-4 py-2 border rounded-md">
+          <span
+            key="end-ellipsis"
+            className="px-3 py-1 flex items-center border rounded-md"
+          >
             <BsThreeDots />
           </span>
         );
@@ -87,7 +95,7 @@ const Pagination: React.FC<Props> = ({ totalPages, fetchData }) => {
         <button
           key={totalPages}
           onClick={() => handleClick(totalPages)}
-          className="px-4 py-2 rounded-md bg-gray-300 text-gray-700"
+          className="px-3 py-1 rounded-md bg-gray-300 text-gray-700"
         >
           {totalPages}
         </button>
@@ -101,12 +109,12 @@ const Pagination: React.FC<Props> = ({ totalPages, fetchData }) => {
     <section
       id="pagination"
       aria-label="pagination"
-      className="w-full flex justify-center items-center space-x-2 my-6"
+      className="flex justify-center items-center space-x-2 my-6 overflow-x-auto"
     >
       <button
         onClick={() => handleClick(currentPage - 1)}
         disabled={currentPage === 1}
-        className={`px-4 py-2 rounded-md flex items-center space-x-1 ${
+        className={`px-3 py-1 rounded-md flex items-center space-x-1 ${
           currentPage === 1
             ? "bg-gray-300 text-gray-500 cursor-not-allowed"
             : "bg-gray-700 text-white"
@@ -119,7 +127,7 @@ const Pagination: React.FC<Props> = ({ totalPages, fetchData }) => {
       <button
         onClick={() => handleClick(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className={`px-4 py-2 rounded-md flex items-center space-x-1 ${
+        className={`px-3 py-1 rounded-md flex items-center space-x-1 ${
           currentPage === totalPages
             ? "bg-gray-300 text-gray-500 cursor-not-allowed"
             : "bg-gray-700 text-white"
