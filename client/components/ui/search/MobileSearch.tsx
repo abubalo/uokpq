@@ -1,19 +1,24 @@
 "use client";
-import React, { SetStateAction, useEffect, useRef, useState } from "react";
-import { SearchOptions } from "../../shared/Icons";
-import ToolTip from "../Tooltip";
-import { IoMenuSharp } from "react-icons/io5";
+import React, { useEffect, useRef, useState } from "react";
 import Avatar from "@/components/profile/Avatar";
+import { AnimatePresence } from "framer-motion";
+import HamburgerToBackArrow from "../HamburgerToBackArrow";
 
 type SearchProps = {
   searchQuery?: string;
-  onSearchChange?: (query: string) => void;
+  onSearchChange: (query: string) => void;
+  isFocused: boolean;
+  onSearchFocus: () => void;
+  onSearchBlur: () => void;
   onOpen: () => void;
 };
 
 const MobileSearch: React.FC<SearchProps> = ({
   searchQuery,
   onSearchChange,
+  onSearchFocus,
+  onSearchBlur,
+  isFocused,
   onOpen,
 }) => {
   const [showAdvanceOptions, setShowAdvanceOptions] = useState(false);
@@ -34,21 +39,40 @@ const MobileSearch: React.FC<SearchProps> = ({
   }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // onSearchChange(e.target.value);
+    onSearchChange(e.target.value);
+  };
+
+  const handleArrowClick = () => {
+    if (isFocused) {
+      onSearchChange(""); // Clear the search query
+      onSearchBlur(); // Defocus the search input
+    } else {
+      onOpen(); // Open the mobile navigation
+    }
   };
 
   return (
-    <div ref={containerRef} className="relative  w-full max-w-2xl">
+    <div ref={containerRef} className=" w-full max-w-2xl">
       <div className="relative flex items-center">
         <input
           type="text"
           placeholder="Search papers..."
           value={searchQuery}
           onChange={handleInputChange}
+          onFocus={onSearchFocus}
+          onBlur={onSearchBlur}
           className="w-full py-3 pl-10 pr-12 text-sm font-semibold transition duration-150 ease-in-out bg-transparent border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-transparent placeholder:text-gray-400 dark:bg-transparent dark:border-gray-500 dark:text-white dark:placeholder:text-gray-500 dark:focus-within:bg-gray-800"
         />
-        <button onClick={onOpen} className="absolute inset-y-0 left-0 text-gray-800 flex items-center pl-3 dark:text-gray-200">
-          <IoMenuSharp size={24} />
+        <button
+          type="button"
+          className="absolute inset-y-0 left-0 text-gray-800 flex items-center pl-3 dark:text-gray-200"
+        >
+          <AnimatePresence>
+            <HamburgerToBackArrow
+              isFocused={isFocused}
+              onArrowClick={handleArrowClick}
+            />
+          </AnimatePresence>
         </button>
         <button
           aria-label="profile settings"
