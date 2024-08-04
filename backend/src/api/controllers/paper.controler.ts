@@ -11,7 +11,7 @@ const handleFailure = <T>(res: Response, error: T, statusCode: number) => {
   res.status(statusCode).json({ message: error });
 };
 
-export async function addPapper(req: Request, res: Response): Promise<void> {
+export async function addPaper(req: Request, res: Response): Promise<void> {
   try {
     const paper = req.body;
     const { error } = validatePaper(paper);
@@ -212,7 +212,7 @@ export async function toggleBookmark(
   try {
     const { paperId, userId } = req.body;
 
-    const { bookmarked, message } = await paperModel.toogleBookmark({
+    const { bookmarked, message } = await paperModel.toggleBookmark({
       userId,
       paperId,
     });
