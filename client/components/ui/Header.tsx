@@ -12,12 +12,20 @@ import { AnimatePresence, motion } from "framer-motion";
 const Header = () => {
   const [darkMode, setDarkMode] = useState(false);
   const [isNavOpen, setIsNavOpen] = useState(false);
+  const [onSearchFocus, setOnsearchFocus] = useState(false);
 
   const handleNavOpen = () => {
     setIsNavOpen(!isNavOpen);
   };
 
   const handleSearch = (query: string) => {};
+
+  const handleSearchFocus = (isFocused?: boolean) => {
+    setOnsearchFocus(true || isFocused);
+  };
+  const handleSearchBlur = () => {
+    setOnsearchFocus(false);
+  };
 
   useEffect(() => {
     // Check for saved preference or system preference
@@ -44,15 +52,27 @@ const Header = () => {
     setDarkMode((prevMode) => !prevMode);
   }, []);
 
+  useEffect(() => {
+    if (isNavOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isNavOpen]);
+
   const user = true;
 
   return (
-    <header className="conainer mx-auto sticky top-0 z-50 ">
+    <header className="w-full sticky top-0 z-40">
       <nav className="hidden px-4 py-3 md:block bg-neutral-800/70 backdrop-blur-md border-b border-gray-200/30">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <Link href="/" aria-label="webiste logo">
+            <Link href="/" aria-label="website logo">
               <Image src="/uokpq.svg" alt="uokpq logo" width={80} height={80} />
             </Link>
           </div>
@@ -93,57 +113,75 @@ const Header = () => {
         </div>
       </nav>
       {/* Mobile Navbar */}
-      <div className="block sticky top-0 px-4 py-2 bg-neutral-800/70 border-b border-neutral-300/40 backdrop-blur-lg md:hidden">
+      <div className="block sticky top-0 px-4 py-3 bg-neutral-800/70 border-b border-neutral-300/40 backdrop-blur-lg md:hidden">
         <MobileSearch
           onOpen={handleNavOpen}
+          isFocused={onSearchFocus}
+          onSearchFocus={handleSearchFocus}
+          onSearchBlur={handleSearchBlur}
           searchQuery=""
           onSearchChange={handleSearch}
         />
       </div>
       <AnimatePresence>
         {isNavOpen && (
-          <motion.nav
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2, ease: "easeInOut" }}
-            className="container mx-auto flex flex-col md:hidden"
-          >
-            <div className="relative min-h-dvh font-semibold">
-              <ul className="absolute inset-0 w-full p-4 space-y-4 z-50 bg-white dark:bg-gray-900">
-                <li className="py-2 border-b">
-                  <Link href="/bookmarks" aria-label="Bookmarks">
-                    Bookmarks
-                  </Link>
-                </li>
-                <li className="py-2 border-b">
-                  <Link href="/profile" aria-label="Profile">
-                    Profile
-                  </Link>
-                </li>
-                <li className="py-2 border-b">
-                  <Link href="/help" aria-label="Help">
-                    Help
-                  </Link>
-                </li>
-                <li className="py-2 border-b">
-                  <button
-                    onClick={toggleDarkMode}
-                    className="p-2 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-700/50 transition-colors"
-                    aria-label={
-                      darkMode ? "Switch to light mode" : "Switch to dark mode"
-                    }
-                  >
-                    {darkMode ? (
-                      <FiSun className="text-yellow-400" size={20} />
-                    ) : (
-                      <FiMoon className="text-gray-600" size={20} />
-                    )}
-                  </button>
-                </li>
-              </ul>
-            </div>
-          </motion.nav>
+          <>
+            {/* Background Overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.8 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2, ease: "easeInOut" }}
+              className="fixed inset-0 bg-black z-20 cursor-pointer"
+              aria-label="background overlay"
+              onClick={handleNavOpen}
+            />
+            {/* Navigation Panel */}
+            <motion.nav
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ duration: 0.2, ease: "easeInOut" }}
+              className="fixed top-0 left-0 h-full z-30 flex flex-col md:hidden w-[300px]"
+            >
+              <div className="relative min-h-dvh font-semibold">
+                <ul className="absolute left-0 top-0 bottom-0 w-full p-4 z-30 space-y-4 bg-white dark:bg-neutral-900">
+                  <li className="py-2 border-b">
+                    <Link href="/bookmarks" aria-label="Bookmarks">
+                      Bookmarks
+                    </Link>
+                  </li>
+                  <li className="py-2 border-b">
+                    <Link href="/profile" aria-label="Profile">
+                      Profile
+                    </Link>
+                  </li>
+                  <li className="py-2 border-b">
+                    <Link href="/help" aria-label="Help">
+                      Help
+                    </Link>
+                  </li>
+                  <li className="py-2 border-b">
+                    <button
+                      onClick={toggleDarkMode}
+                      className="p-2 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-700/50 transition-colors"
+                      aria-label={
+                        darkMode
+                          ? "Switch to light mode"
+                          : "Switch to dark mode"
+                      }
+                    >
+                      {darkMode ? (
+                        <FiSun className="text-yellow-400" size={20} />
+                      ) : (
+                        <FiMoon className="text-gray-600" size={20} />
+                      )}
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </motion.nav>
+          </>
         )}
       </AnimatePresence>
     </header>
