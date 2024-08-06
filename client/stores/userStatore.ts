@@ -1,5 +1,5 @@
 import { User } from "@/types";
-import * as api from "@/utils/featchUserData";
+import * as api from "@/utils/fetchUserData";
 import { create } from "zustand";
 
 type UserAuth = {
