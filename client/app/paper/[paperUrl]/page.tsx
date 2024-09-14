@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import NotFound from "../../../components/ui/not-found";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { getPDF, savePDF } from "@/indexedDBUtils";
 
 type Props = {
@@ -10,32 +10,30 @@ type Props = {
   };
 };
 
-const Papers = ({ params: { paperUrl } }: Props) => {
+const Paper = ({ params: { paperUrl } }: Props) => {
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchPDF = async () => {
       if (!paperUrl) return;
       try {
-        const cachePdf = await getPDF(paperUrl);
-        if (cachePdf) {
-          setPdfUrl(URL.createObjectURL(cachePdf));
+        const cachedPdf = await getPDF(paperUrl);
+        if (cachedPdf) {
+          setPdfUrl(URL.createObjectURL(cachedPdf));
         } else {
           const response = await axios.get<Blob>(
-            `https://uokpq.com/papers/e/${paperUrl}.pdf`,
+            "https://pub-2fe06c28f94d40f3ba92e350ada984e5.r2.dev/dummy.pdf",
             { responseType: "blob" }
           );
 
           const blob = response.data;
-          const reader = new FileReader();
           await savePDF(paperUrl, blob);
           setPdfUrl(URL.createObjectURL(blob));
-
-          reader.onload = (e) => setPdfUrl(e.target?.result as string);
-          reader.readAsDataURL(blob);
         }
       } catch (error) {
-        console.log("Error fetching pdf: ", error);
+        const errorMessage =
+          error instanceof AxiosError ? error.message : error;
+        console.log("Error fetching pdf: ", errorMessage);
         setPdfUrl(null);
       }
     };
@@ -48,17 +46,21 @@ const Papers = ({ params: { paperUrl } }: Props) => {
   }
 
   return (
-    <main className="h-screen ">
+    <main className="h-screen">
       <div className="relative w-full h-full max-w-full max-h-full">
-        <embed
-          src={pdfUrl ?? "/pdfs/1984.pdf"}
-          type="application/pdf"
-          className="w-full h-full"
-          style={{ height: "calc(100vh - 0px)" }} // Adjust height as needed
-        ></embed>
+        {pdfUrl ? (
+          <embed
+            src={pdfUrl}
+            type="application/pdf"
+            className="w-full h-full"
+            style={{ height: "calc(100vh - 0px)" }}
+          />
+        ) : (
+          <p>Loading PDF...</p>
+        )}
       </div>
     </main>
   );
 };
 
-export default Papers;
+export default Paper;
