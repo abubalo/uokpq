@@ -9,9 +9,8 @@ type Props = {
   src: string;
   alt?: string;
   title: string;
-  text: string;
   lecturer: string;
-  date: string;
+  date: number | string;
   url: string;
   tags: string[];
   bookmarked: boolean;
@@ -21,7 +20,6 @@ const PaperCard: React.FC<Props> = ({
   src,
   alt = "",
   title,
-  text,
   lecturer,
   date,
   url,
@@ -38,19 +36,18 @@ const PaperCard: React.FC<Props> = ({
     setIsBookmarked(!isBookmarked);
   };
   return (
-    <div className="relative p-4 border border-neutral-400 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200">
+    <div className="relative border border-neutral-400 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200">
       <div className="relative w-full h-48">
         <Image src={src} alt={alt} fill className="rounded-t-lg object-cover" />
       </div>
-      <div className="py-4 pb-2 space-y-6">
+      <div className="p-4 space-y-6">
         <div className="space-y-1">
           <h2 className="text-xl font-semibold">{title}</h2>
-          {/* <p className="dark:text-gray-300">{text}</p> */}
           <p className="dark:text-gray-300">
             Taught by: <span className="font-semibold">{lecturer}</span>
           </p>
           <small className="dark:text-gray-400 font-semibold">
-            Date: {date}
+            Date Taken: {date}
           </small>
         </div>
         <div className="space-x-2">
