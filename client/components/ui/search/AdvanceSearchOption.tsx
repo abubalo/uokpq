@@ -1,11 +1,10 @@
-/* eslint-disable react/no-unescaped-entities */
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import OptionsInput from "./OptionsInput";
 import Dropdown from "../Dropdown/Dropdown";
 import DropdownList from "../Dropdown/DropdownList";
 import Button from "../button/Button";
-import { useAdvanceSearchStore } from "@/stores/stateStore";
+import { useAdvanceSearchStore } from "@/stores/searchStore";
 
 type Props = {
   showAdvanceOptions: boolean;
