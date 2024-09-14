@@ -1,5 +1,10 @@
 import { create } from "zustand";
 
+type SearchStore = {
+  query: string;
+  setQuery: (query: string) => void;
+};
+
 type AdvanceOptiosStore = {
   moduleName: string;
   taughtBy: string;
@@ -20,6 +25,12 @@ type AdvanceOptiosStore = {
   setContainsWords: (containsWords: string) => void;
   setSession: (session: "day" | "evening" | "weekend" | string) => void;
 };
+
+
+export const useSearchStore = create<SearchStore>((set) => ({
+  query: "",
+  setQuery: (query) => set({ query})
+}))
 
 export const useAdvanceSearchStore = create<AdvanceOptiosStore>((set) => ({
   moduleName: "",
