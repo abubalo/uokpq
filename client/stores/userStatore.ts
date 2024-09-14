@@ -27,12 +27,12 @@ export const useAuth = create<UserAuth>((set, get) => ({
   login: async ({ email, password }) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await api.loginUser({ email, password });
+      const { data, error } = await api.loginUser({ email, password });
 
-      if (response.data) {
-        set({ user: response.data, isLoading: false });
+      if (data) {
+        set({ user: data, isLoading: false });
       } else {
-        set({ error: response.error, isLoading: false });
+        set({ error: error, isLoading: false });
       }
     } catch (error) {
       set({ error: "Login Failed", isLoading: false });
@@ -42,12 +42,12 @@ export const useAuth = create<UserAuth>((set, get) => ({
     set({ isLoading: true, error: null });
 
     try {
-      const response = await api.registerUser(userData);
+      const { data, error } = await api.registerUser(userData);
 
-      if (response.data) {
-        set({ user: response.data, isLoading: false });
+      if (data) {
+        set({ user: data, isLoading: false });
       } else {
-        set({ error: response.error, isLoading: false });
+        set({ error: error, isLoading: false });
       }
     } catch (error) {
       set({ error: "Registration failed", isLoading: false });
@@ -64,12 +64,12 @@ export const useAuth = create<UserAuth>((set, get) => ({
     }
 
     try {
-      const response = await api.getUserProfile();
+      const { data, error } = await api.getUserProfile();
 
-      if (response.data) {
-        set({ user: response.data, isLoading: false });
+      if (data) {
+        set({ user: data, isLoading: false });
       } else {
-        set({ error: response.error, isLoading: false });
+        set({ error: error, isLoading: false });
       }
     } catch (error) {
       set({ error: "Unable to fetch user data", isLoading: false });
@@ -85,11 +85,11 @@ export const useAuth = create<UserAuth>((set, get) => ({
     }
 
     try {
-      const response = await api.updateUser(user.id, userData);
-      if (response.data) {
-        set({ user: { ...user, ...response.data }, isLoading: false });
+      const { data, error } = await api.updateUser(user.id, userData);
+      if (data) {
+        set({ user: { ...user, ...data }, isLoading: false });
       } else {
-        set({ error: response.error, isLoading: false });
+        set({ error: error, isLoading: false });
       }
     } catch (error) {
       set({ error: "Updation failed", isLoading: false });
@@ -106,12 +106,12 @@ export const useAuth = create<UserAuth>((set, get) => ({
     }
 
     try {
-      const response = await api.deleteUser(user.id);
+      const { data, error } = await api.deleteUser(user.id);
 
-      if (response.data) {
-        set({ user: response.data, isLoading: false });
+      if (data) {
+        set({ user: data, isLoading: false });
       } else {
-        set({ error: response.error, isLoading: false });
+        set({ error: error, isLoading: false });
       }
     } catch (error) {
       set({ error: "Failed to delete account!", isLoading: false });
