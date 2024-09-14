@@ -2,10 +2,12 @@ import { Paper } from "@/types";
 import React from "react";
 import PaperCard from "./PaperCard";
 
-const Papers: React.FC<{ papers: Paper[] }> = ({ papers }) => {
+const Papers: React.FC<{ papers?: Paper[] }> = ({ papers }) => {
+
+  
   return (
     <section className="container mx-auto h-full min-h-dvh flex flex-col">
-      <div className="grid grid-cols-1 p-4 md:grid-cols-3 lg:grid-cols-3 gap-3 mt-6 md:p-0">
+      <div className="grid grid-cols-1 p-4 md:grid-cols-3 lg:grid-cols-3 gap-8 md:p-0">
         <PaperCard
           src="https://images.unsplash.com/photo-1532153975070-2e9ab71f1b14?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
           title="Introduction to Computer"
@@ -63,7 +65,7 @@ const Papers: React.FC<{ papers: Paper[] }> = ({ papers }) => {
       </div>
 
       <div className="grid grid-cols-1 p-4 md:grid-cols-3 lg:grid-cols-3 gap-3 mt-6 md:p-0">
-        {papers.map((paper) => (
+        {papers && papers.map((paper) => (
           <>
             <PaperCard
               src={paper.thumbnail}
