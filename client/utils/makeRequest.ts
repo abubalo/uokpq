@@ -1,6 +1,6 @@
 import { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 
-interface ApiResponse<T> {
+export interface ApiResponse<T> {
   data: T | null;
   error?: string | null;
 }
