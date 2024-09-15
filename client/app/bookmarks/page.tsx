@@ -1,22 +1,15 @@
+import React from "react";
 import Papers from "@/components/papers/Papers";
 import Footer from "@/components/ui/Footer";
 import Header from "@/components/ui/Header";
 import { useFetchBookmarks } from "@/hooks/usePaperQueries";
 import { useAuth } from "@/stores/userStatore";
-import React from "react";
 
-const Bookmarks = async () => {
-  const { user } = useAuth();
-
-  
-  const { data, isLoading, error } = useFetchBookmarks(user?.id);
-  
-  if (!user) {
-    return <>Logged in</>;
-  }
+const BookmarksContent: React.FC<{userId: string}> = ({ userId }) => {
+  const { data, isLoading, error } = useFetchBookmarks(userId);
 
   if (error) {
-    return <div>Error occured</div>;
+    return <div>Error occurred</div>;
   }
 
   if (isLoading) {
@@ -27,10 +20,20 @@ const Bookmarks = async () => {
     return <>No data</>;
   }
 
+  return <Papers papers={data} />;
+};
+
+const Bookmarks = () => {
+  const { user } = useAuth();
+
+  if (!user) {
+    return <div>Please log in to view bookmarks</div>;
+  }
+
   return (
     <main>
       <Header />
-      <Papers papers={data} />
+      <BookmarksContent userId={user.id} />
       <Footer />
     </main>
   );
