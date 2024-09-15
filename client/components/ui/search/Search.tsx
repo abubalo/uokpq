@@ -1,17 +1,26 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+
+import { useEffect, useRef, useState } from "react";
 import { SearchOptions } from "../../shared/Icons";
 import ToolTip from "../Tooltip";
 import AdvanceSearchOption from "./AdvanceSearchOption";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useSearchStore } from "@/stores/searchStore";
 
-type SearchProps = {
-  searchQuery?: string;
-  onSearchChange?: (query: string) => void;
-};
 
-const Search: React.FC<SearchProps> = ({ searchQuery, onSearchChange }) => {
+const Search: React.FC = () => {
   const [showAdvanceOptions, setShowAdvanceOptions] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const { query, setQuery } = useSearchStore();
+
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { replace } = useRouter();
+
+  useEffect(() => {
+    const queryParam = searchParams.get("query") || "";
+    setQuery(queryParam);
+  }, [searchParams, setQuery]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -27,22 +36,45 @@ const Search: React.FC<SearchProps> = ({ searchQuery, onSearchChange }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const updateSearchParams = (
+    term: string,
+    searchParams: URLSearchParams,
+    pathname: string,
+    replace: (url: string) => void
+  ) => {
+    const params = new URLSearchParams(searchParams);
+
+    if (term) {
+      params.set("query", term);
+    } else {
+      params.delete("query");
+    }
+
+    replace(`${pathname}?${params.toString()}`);
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // onSearchChange(e.target.value);
+    const value = e.target.value;
+    setQuery(value);
+    handleSearch(value);
+  };
+
+  const handleSearch = (term: string) => {
+    updateSearchParams(term, searchParams, pathname, replace);
   };
 
   return (
     <div
       ref={containerRef}
-      className="relative hidden w-full max-w-2xl md:block"
+      className="relative hidden w-full md:max-w-md lg:max-w-2xl md:block"
     >
       <div className="relative flex items-center">
         <input
           type="text"
-          placeholder="Search papers..."
-          value={searchQuery}
+          placeholder="Search papers by name, lecturer, code..."
+          value={query}
           onChange={handleInputChange}
-          className="w-full py-3 pl-10 pr-12 text-sm transition duration-150 ease-in-out bg-transparent border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-400 dark:bg-transparent dark:border-gray-400 dark:text-white dark:placeholder:text-gray-200 dark:focus-within:bg-gray-800"
+          className="w-full py-3 pl-10 pr-12 text-sm transition duration-150 ease-in-out bg-transparent border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:border-transparent placeholder:text-gray-400 dark:bg-transparent dark:border-gray-400 dark:text-white dark:placeholder:text-gray-500 dark:focus-within:bg-transparent"
         />
         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
           <svg
@@ -61,7 +93,7 @@ const Search: React.FC<SearchProps> = ({ searchQuery, onSearchChange }) => {
           <ToolTip text="Show options">
             <button
               type="button"
-              className="p-1 text-gray-400 rounded-full hover:text-gray-500 focus:outline-none "
+              className="p-1 text-gray-400 rounded-full hover:text-gray-500 focus:outline-none"
               onClick={() => setShowAdvanceOptions(true)}
             >
               <SearchOptions className="w-5 h-5" />
