@@ -1,13 +1,14 @@
+"use client"
 import React from "react";
 import Papers from "@/components/papers/Papers";
 import Footer from "@/components/ui/Footer";
 import Header from "@/components/ui/Header";
 import { useFetchBookmarks } from "@/hooks/usePaperQueries";
-import { useAuth } from "@/stores/userStatore";
+import { useAuth } from "@/stores/userStore";
 
 const BookmarksContent: React.FC<{userId: string}> = ({ userId }) => {
   const { data, isLoading, error } = useFetchBookmarks(userId);
-
+  
   if (error) {
     return <div>Error occurred</div>;
   }
