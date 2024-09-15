@@ -45,7 +45,7 @@ export function useToggleBookmark() {
   );
 }
 
-export function useFetchBookmarks(userId?: string) {
+export function useFetchBookmarks(userId: string) {
   return useQuery(["bookmarks", userId], async () =>
     unwrapApiResponse(await api.fetchBookmarks(userId))
   );
