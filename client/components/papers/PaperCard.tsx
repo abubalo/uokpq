@@ -36,9 +36,9 @@ const PaperCard: React.FC<Props> = ({
     setIsBookmarked(!isBookmarked);
   };
   return (
-    <div className="relative border border-neutral-400 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200">
+    <div className="relative p-4 border hover:bg-neutral-500/20 border-neutral-400 rounded-lg shadow-md backdrop-blur-md transition-colors dark:hover:bg-neutral-700/20 duration-200">
       <div className="relative w-full h-48">
-        <Image src={src} alt={alt} fill className="rounded-t-lg object-cover" />
+        <Image src={src} alt={alt} fill className="rounded-t-lg object-cover hover:scale-75 duration-200" />
       </div>
       <div className="p-4 space-y-6">
         <div className="space-y-1">
