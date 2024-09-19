@@ -43,5 +43,5 @@ export function archivePaper(paperId: string) {
   return makeApiRequest<void>(() => apiClient.put(`/papers/achive/${paperId}`));
 }
 export function deletePaper(paperId: string) {
-  return makeApiRequest<void>(() => apiClient.delete(`/${paperId}`));
+  return makeApiRequest<void>(() => apiClient.delete(`/papers/${paperId}`));
 }
