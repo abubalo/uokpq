@@ -3,7 +3,7 @@ import "./loader.css"
 
 const AnimatedBoxes = () => {
   return (
-    <main className="main">
+    <main className="w-full h-100 flex items-center justify-center">
       <div className="container">
         <div className="box box1" style={{ borderColor: "#F59E0B" }}></div>
         <div className="box box2" style={{ borderColor: "#EF4444" }}></div>
