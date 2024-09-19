@@ -6,8 +6,10 @@ export function addPaper() {
   return makeApiRequest<Paper>(() => apiClient.post("/paper"));
 }
 
-export function fetchPapers() {
-  return makeApiRequest<Paper[]>(() => apiClient.get("/papers"));
+export function fetchPapers(page = 1, query = "") {
+  return makeApiRequest<Paper[]>(() =>
+    apiClient.get("/papers", { params: { page, query } })
+  );
 }
 
 export function fetchPaperById(paperId: string) {
