@@ -1,11 +1,13 @@
 import { User } from "@/types";
 import * as api from "@/utils/fetchUserData";
+import { ApiError } from "@/utils/makeRequest";
 import { create } from "zustand";
 
 type UserAuth = {
   user: User | null;
   isLoading: boolean;
-  error: string | null;
+  error: ApiError | null;
+  message?: string;
   login: ({
     email,
     password,
@@ -13,108 +15,162 @@ type UserAuth = {
     email: string;
     password: string;
   }) => Promise<void>;
+
   register: (userData: Pick<User, "email" | "password">) => Promise<void>;
   fetchProfile: () => Promise<void>;
   updateProfile: (user: Partial<User>) => Promise<void>;
   deleteProfile: () => Promise<void>;
+  clearError: () => void;
 };
 
 export const useAuth = create<UserAuth>((set, get) => ({
   user: null,
   isLoading: false,
   error: null,
+  message: "",
 
   login: async ({ email, password }) => {
     set({ isLoading: true, error: null });
     try {
-      const { data, error } = await api.loginUser({ email, password });
+      const response = await api.loginUser({ email, password });
 
-      if (data) {
-        set({ user: data, isLoading: false });
+      if (response.data) {
+        set({ user: response.data, isLoading: false });
       } else {
-        set({ error: error, isLoading: false });
+        set({
+          error: response.error,
+          isLoading: false,
+        });
+        throw response.error;
       }
     } catch (error) {
-      set({ error: "Login Failed", isLoading: false });
+      const apiError = error as ApiError;
+      set({ user: null, error: apiError, isLoading: false });
+      throw apiError;
     }
   },
+
   register: async (userData) => {
     set({ isLoading: true, error: null });
 
     try {
-      const { data, error } = await api.registerUser(userData);
+      const response = await api.registerUser(userData);
 
-      if (data) {
-        set({ user: data, isLoading: false });
+      if (response.data) {
+        set({ user: response.data, isLoading: false });
       } else {
-        set({ error: error, isLoading: false });
+        set({
+          user: null,
+          error: response.error,
+          isLoading: false,
+        });
+        throw response.error;
       }
     } catch (error) {
-      set({ error: "Registration failed", isLoading: false });
+      const apiError = error as ApiError;
+      set({
+        user: null,
+        error: apiError,
+        isLoading: false,
+      });
+      throw apiError.message;
     }
   },
+
   fetchProfile: async () => {
     set({ isLoading: true, error: null });
 
     const { user } = get();
 
     if (!user) {
-      set({ error: "No user logged in!", isLoading: false });
+      set({ user: null, error: "User is not logged in!", isLoading: false });
       return;
     }
 
     try {
-      const { data, error } = await api.getUserProfile();
+      const response = await api.getUserProfile();
 
-      if (data) {
-        set({ user: data, isLoading: false });
+      if (response.data) {
+        set({ user: response.data, isLoading: false });
       } else {
-        set({ error: error, isLoading: false });
+        set({
+          error: response.error,
+          isLoading: false,
+        });
+        throw response.error;
       }
     } catch (error) {
-      set({ error: "Unable to fetch user data", isLoading: false });
+      const apiError = error as ApiError;
+      set({
+        user: null,
+        error: apiError,
+        isLoading: false,
+      });
+      throw apiError.message;
     }
   },
+
   updateProfile: async (userData) => {
     set({ isLoading: true, error: null });
 
     const { user } = get();
     if (!user) {
-      set({ error: "No user logged in", isLoading: false });
+      set({ error: "User is not logged in!", isLoading: false });
       return;
     }
 
     try {
-      const { data, error } = await api.updateUser(user.id, userData);
-      if (data) {
+      const response = await api.updateUser(user.id, userData);
+
+      if (response.data) {
         set({ user: { ...user, ...data }, isLoading: false });
       } else {
-        set({ error: error, isLoading: false });
+        set({
+          error: response.error,
+          isLoading: false,
+        });
+        throw response.error;
       }
     } catch (error) {
-      set({ error: "Updation failed", isLoading: false });
+      const apiError = error as ApiError;
+      set({
+        user: null,
+        error: apiError,
+        isLoading: false,
+      });
+      throw apiError.message;
     }
   },
+
   deleteProfile: async () => {
     set({ isLoading: true, error: null });
 
     const { user } = get();
 
     if (!user) {
-      set({ error: "No user logged in!", isLoading: false });
+      set({ user: null, error: response.error, isLoading: false });
       return;
     }
 
     try {
-      const { data, error } = await api.deleteUser(user.id);
+      const response = await api.deleteUser(user.id);
 
-      if (data) {
-        set({ user: data, isLoading: false });
+      if (response.data) {
+        set({ user: null, isLoading: false });
       } else {
-        set({ error: error, isLoading: false });
+        set({ user: null, error: response.error, isLoading: false });
+        throw response.error;
       }
     } catch (error) {
-      set({ error: "Failed to delete account!", isLoading: false });
+      const apiError = error as ApiError;
+      set({
+        user: null,
+        error: apiError,
+        isLoading: false,
+      });
+      throw apiError.message;
     }
   },
+
+  clearError: () => set({ error: null }),
 }));
