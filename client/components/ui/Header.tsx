@@ -8,19 +8,20 @@ import Link from "next/link";
 import Avatar from "../profile/Avatar";
 import MobileSearch from "./search/MobileSearch";
 import { AnimatePresence, motion } from "framer-motion";
+import { useAuth } from "@/stores/userStore";
 
 const Header = () => {
   const [darkMode, setDarkMode] = useState(false);
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [onSearchFocus, setOnsearchFocus] = useState(false);
 
+  const { user } = useAuth();
+
   const handleNavOpen = () => {
     setIsNavOpen(!isNavOpen);
   };
 
-  const handleSearch = (query: string) => {
-    
-  };
+  const handleSearch = (query: string) => {};
 
   const handleSearchFocus = (isFocused?: boolean) => {
     setOnsearchFocus(true || isFocused);
@@ -66,21 +67,15 @@ const Header = () => {
     };
   }, [isNavOpen]);
 
-  const user = true;
-
   return (
     <header className="w-full sticky top-0 z-40">
       <nav className="hidden px-4 py-3 md:block bg-neutral-800/70 backdrop-blur-md border-b border-gray-200/30">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <div className="flex-shrink-0">
-            <Link href="/" aria-label="website logo">
-              <Image src="/uokpq.svg" alt="uokpq logo" width={80} height={80} />
-            </Link>
-          </div>
 
-          {/* Search Box */}
-          {/* <Search /> */}
+          <Link href="/" aria-label="website logo" className="flex-shrink-0">
+            <Image src="/uokpq.svg" alt="uokpq logo" width={80} height={80} />
+          </Link>
 
           {/* Right Side */}
           <div className="flex items-center space-x-4">
