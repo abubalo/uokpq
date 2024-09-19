@@ -4,7 +4,13 @@ import { NextRequest } from "next/server";
 export function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
-  const publicPaths = ["/login", "/register", "/paper", "/reset-password", "/"];
+  const publicPaths = [
+    "/login",
+    "/register",
+    "/paper",
+    "/reset-password",
+    "/",
+  ];
   const isPublicPath = publicPaths.some((publicPath) =>
     publicPath === "/" ? path === publicPath : path.startsWith(publicPath)
   );
@@ -12,7 +18,7 @@ export function middleware(request: NextRequest) {
   const token = request.cookies.get("Bearer")?.value || "";
 
   if (isPublicPath && token) {
-    return NextResponse.redirect(new URL("/dashboard", request.nextUrl));
+    return NextResponse.redirect(new URL("/", request.nextUrl));
   }
 
   if (!isPublicPath && !token) {
