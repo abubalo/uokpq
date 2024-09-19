@@ -5,7 +5,7 @@ import { Paper } from "@/types";
 
 function unwrapApiResponse<T>(response: ApiResponse<T>): T {
   if (response.error) {
-    throw new Error(response.error);
+    throw response.error;
   }
   return response.data as T;
 }
