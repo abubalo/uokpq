@@ -42,6 +42,12 @@ export type Paper = {
   isBookmarked: boolean;
 };
 
+export type PapersData = {
+  papers: Paper[];
+  currentPage: number;
+  totalPage: number;
+};
+
 export interface SearchParams {
   query?: string;
   year?: number;
