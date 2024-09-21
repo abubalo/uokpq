@@ -1,4 +1,4 @@
-import { Paper } from "@/types";
+import { Paper, PapersData } from "@/types";
 import { apiClient } from "./apiClient";
 import { makeApiRequest } from "./makeRequest";
 
@@ -6,9 +6,9 @@ export function addPaper() {
   return makeApiRequest<Paper>(() => apiClient.post("/paper"));
 }
 
-export function fetchPapers(page = 1, query = "") {
-  return makeApiRequest<Paper[]>(() =>
-    apiClient.get("/papers", { params: { page, query } })
+export function fetchPapers(page = 1, limit: number = 10) {
+  return makeApiRequest<PapersData>(() =>
+    apiClient.get(`/papers?page=${page}&limit=${limit}`)
   );
 }
 
