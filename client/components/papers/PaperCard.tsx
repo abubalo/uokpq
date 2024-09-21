@@ -4,8 +4,12 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { FaBookmark, FaRegBookmark } from "react-icons/fa6";
 import ToolTip from "../ui/Tooltip";
+import { useToggleBookmark } from "@/hooks/usePaperQueries";
+import { useAuth } from "@/stores/userStore";
+import { toggleBookmark } from "@/utils/fetchPaperData";
 
 type Props = {
+  id: string;
   src: string;
   alt?: string;
   title: string;
@@ -17,6 +21,7 @@ type Props = {
 };
 
 const PaperCard: React.FC<Props> = ({
+  id,
   src,
   alt = "",
   title,
@@ -27,18 +32,31 @@ const PaperCard: React.FC<Props> = ({
   bookmarked,
 }) => {
   const [isBookmarked, setIsBookmarked] = useState(bookmarked);
+  const { mutate: toggleBookmark } = useToggleBookmark();
+  const { user } = useAuth();
+  const userId = String(user?.id);
+
   const handleToggleBookmark = (
     e: React.MouseEvent<HTMLSpanElement, MouseEvent>
   ) => {
     e.stopPropagation();
     e.preventDefault();
+    if (!user) return;
 
-    setIsBookmarked(!isBookmarked);
+    setIsBookmarked((prev) => !prev);
+
+    toggleBookmark({ userId, paperId: id });
   };
+
   return (
     <div className="relative p-4 border hover:bg-neutral-500/20 border-neutral-400 rounded-lg shadow-md backdrop-blur-md transition-colors dark:hover:bg-neutral-700/20 duration-200">
       <div className="relative w-full h-48">
-        <Image src={src} alt={alt} fill className="rounded-t-lg object-cover hover:scale-75 duration-200" />
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          className="rounded-t-lg object-cover hover:scale-75 duration-200"
+        />
       </div>
       <div className="p-4 space-y-6">
         <div className="space-y-1">
