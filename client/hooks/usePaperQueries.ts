@@ -10,9 +10,17 @@ function unwrapApiResponse<T>(response: ApiResponse<T>): T {
   return response.data as T;
 }
 
-export function usePapers() {
-  return useQuery("papers", async () =>
-    unwrapApiResponse(await api.fetchPapers())
+export function usePapers(page: number, limit: number = 10) {
+  return useQuery(
+    ["papers", page, limit],
+    async () => unwrapApiResponse(await api.fetchPapers(page, limit)),
+    {
+      enabled: !!page,
+      onError: (error) => {
+        console.error("Error fetching papers:", error);
+        // You could trigger a toast notification or error boundary here
+      },
+    } // Ensure query only runs when page is valid
   );
 }
 
@@ -38,6 +46,25 @@ export function useToggleBookmark() {
     async (data: { userId: string; paperId: string }) =>
       unwrapApiResponse(await api.toggleBookmark(data)),
     {
+      onMutate: async (data) => {
+        const previousBookmarks = queryClient.getQueryData([
+          "bookmarks",
+          data.userId,
+        ]);
+        queryClient.setQueryData(["bookmarks", data.userId], (old: any) => {
+          // Update bookmark list optimistically
+          return old.includes(data.paperId)
+            ? old.filter((id: string) => id !== data.paperId)
+            : [...old, data.paperId];
+        });
+        return { previousBookmarks };
+      },
+      onError: (err, data, context) => {
+        queryClient.setQueryData(
+          ["bookmarks", data.userId],
+          context?.previousBookmarks
+        );
+      },
       onSuccess: () => {
         queryClient.invalidateQueries("bookmark");
       },
