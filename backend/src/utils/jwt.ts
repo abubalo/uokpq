@@ -10,7 +10,7 @@ export async function generateJwtToken(user: Partial<User>): Promise<string> {
       iat: Math.floor(Date.now() / 1000)
     };
 
-    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+    const token = jwt.sign(payload, env.JWT_SECRET, {
       expiresIn: '48h',
     });
 
@@ -24,7 +24,7 @@ export async function verifyJwtToken(
   token: string
 ): Promise<ResponseData<User>> {
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET) as {
+    const decoded = jwt.verify(token, env.JWT_SECRET) as {
       sub: string;
     };
     const userId = decoded.sub;
