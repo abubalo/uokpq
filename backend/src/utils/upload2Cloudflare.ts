@@ -1,3 +1,5 @@
+import {env} from "@config/env"
+
 import {
   S3Client,
   PutObjectCommand,
@@ -8,7 +10,7 @@ const REGION = env.REGION;
 const ACCESS_KEY_ID = env.ACCESS_KEY_ID;
 const SECRET_ACCESS_KEY = env.SECRET_ACCESS_KEY;
 const BUCKET_NAME = env.BUCKET_NAME;
-const ENDPOINT = env.ENDPOINT;
+const ENDPOINT = env.R2_ENDPOINT;
 
 export const s3Client = new S3Client({
   region: REGION,
