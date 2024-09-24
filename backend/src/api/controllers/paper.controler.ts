@@ -3,6 +3,7 @@ import { validatePaper } from '../../validators/paper.validator';
 import * as paperModel from '../models/paper.model';
 import { DatabaseError } from 'pg';
 import { Paper, SearchParams } from '@/types';
+import { getPaperPDF } from '@/utils/getPaperPdf';
 
 const handleSuccess = <T>(res: Response, data: T, statusCode: number = 200) => {
   res.status(statusCode).json({ data });
@@ -48,6 +49,22 @@ export async function addPaper(req: Request, res: Response): Promise<void> {
 
 export async function getPapers(req: Request, res: Response): Promise<void> {
   try {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 15;
+
+    const result = await paperModel.getPapers(page, limit);
+
+    if(!result){
+      return handleFailure(res, { error: 'No papers found' }, 404);
+    }
+
+    const {papers, total} = result;
+
+    return handleSuccess(
+      res,
+      { data: papers, currentPage: page, totalPage: Math.ceil(total / limit) },
+      200
+    );
   } catch (error) {
     console.log('Error fetching papers', error);
     if (error instanceof DatabaseError) {
@@ -133,9 +150,18 @@ export async function getPaperById(req: Request, res: Response): Promise<void> {
       return handleFailure(res, { error: 'Paper not found' }, 404);
     }
 
+    const pdfUrl = await getPaperPDF(paper.filePath);
+
+    if (!pdfUrl) {
+      return handleFailure(res, { error: 'Failed to fetch PDF content' }, 500);
+    }
+
     return handleSuccess(res, {
-      data: paper,
-      message: 'Successefully retrieve paper',
+      data: {
+        paper,
+        pdfUrl,
+      },
+      message: 'Successfully retrieved paper',
     });
   } catch (error) {
     console.log('Error retrieving paper', error);
