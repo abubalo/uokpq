@@ -77,7 +77,7 @@ export const getUser = async ({
 }): Promise<Omit<User, 'password'> | null> => {
   const client = getClient();
   try {
-    const query = 'SELECT * FROM users WHERE eamil = $1';
+    const query = 'SELECT * FROM users WHERE email = $1';
 
     const result = await client.query<User>(query, [email]);
     if (result.rows.length) {
