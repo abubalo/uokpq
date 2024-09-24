@@ -291,7 +291,7 @@ export const isPaperExist = async (id: string): Promise<boolean> => {
   }
 };
 
-export const toogleBookmark = async ({
+export const toggleBookmark = async ({
   userId,
   paperId,
 }: Bookmark): Promise<{ bookmarked: boolean; message: string }> => {
