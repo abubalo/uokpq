@@ -7,9 +7,10 @@ import {
 } from '@/validators/user.validator';
 import { Request, Response } from 'express';
 import * as userModel from '../models/user.model';
-import { generateJwtToken } from '@/utils/jwt';
+import { generateJwtToken, verifyJwtToken } from '@/utils/jwt';
 import { DatabaseError } from 'pg';
 import { env } from '@/config/env';
+import { blacklistToken } from '@/utils/tokenBlacklist';
 
 const handleSuccess = <T>(res: Response, data: T, statusCode: number = 200) => {
   res.status(statusCode).json(data);
@@ -18,9 +19,6 @@ const handleFailure = <T>(res: Response, data: T, statusCode: number) => {
   res.status(statusCode).json(data);
 };
 
-// Adjust import path accordingly
-
-const SESSION_MAX_AGE = parseInt(env.SESSION_MAX_AGE);
 
 export async function addUser(req: Request, res: Response): Promise<void> {
   try {
@@ -40,12 +38,13 @@ export async function addUser(req: Request, res: Response): Promise<void> {
 
     const newUser = await userModel.createUser(user);
     const token = await generateJwtToken(newUser);
+    console.log(token)
 
     res
       .cookie('Bearer', token, {
-        maxAge: SESSION_MAX_AGE,
+        maxAge: env.SESSION_MAX_AGE,
         httpOnly: true,
-        secure: env.NODE_ENV === 'production',
+        secure: env.isProd,
         path: "/",
         sameSite: 'strict',
       })
@@ -85,9 +84,9 @@ export async function loginUser(req: Request, res: Response): Promise<void> {
 
     res
       .cookie('Bearer', token, {
-        maxAge: parseInt(env.SESSION_MAX_AGE),
+        maxAge: env.SESSION_MAX_AGE,
         httpOnly: true,
-        secure: env.NODE_ENV == 'production',
+        secure: env.isProd,
         sameSite: 'strict',
       })
       .json({ data: user, message: 'Successfuly logged in!' });
@@ -100,11 +99,11 @@ export async function loginUser(req: Request, res: Response): Promise<void> {
   }
 }
 
-export async function logoutUser(_: Request, res: Response) {
+export async function _logoutUser(_: Request, res: Response) {
   try {
     res.clearCookie('Bearer', {
       httpOnly: true,
-      secure: env.NODE_ENV == 'production',
+      secure: env.isProd,
       sameSite: 'strict',
     });
 
@@ -115,6 +114,43 @@ export async function logoutUser(_: Request, res: Response) {
       return handleFailure(res, { error: 'Database error occurred' }, 500);
     }
     return handleFailure(res, { error: 'Internal server error' }, 500);
+  }
+}
+
+export async function logoutUser(req: Request, res: Response) {
+  try {
+    const token = req.cookies['Bearer'];
+    
+    if (!token) {
+      return handleFailure(res, { error: 'No token provided' }, 401);
+    }
+
+    const { value: decodedToken, errorMessage } = await verifyJwtToken(token);
+
+    if (!decodedToken) {
+      return handleFailure(res, { error: errorMessage || 'Invalid token' }, 401);
+    }
+
+    const currentTime = Math.floor(Date.now() / 1000);
+    const timeToLive = decodedToken.exp - currentTime;
+
+    await blacklistToken(token, timeToLive);
+
+    res.clearCookie('Bearer', {
+      httpOnly: true,
+      secure: env.isProd,
+      sameSite: 'strict',
+    });
+
+    handleSuccess(res, { message: 'Successfully logged out!' }, 200);
+  } catch (error) {
+    console.log('Logout error: ', error);
+    
+    return handleFailure(
+      res,
+      { error: 'Internal server error' },
+      500
+    );
   }
 }
 
