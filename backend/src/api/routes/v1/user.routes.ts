@@ -16,11 +16,11 @@ const router = Router();
 
 router.post('/create', addUser);
 router.post('/login', loginUser);
+router.post('/logout', isAuthenticated, isAuthorized, logoutUser);
 router.get('/:id', isAuthenticated, isAuthorized, getUserById);
 router.get('/', isAuthenticated, isAuthorized, userRole('admin'), getUsers);
-router.get('/loguot', isAuthenticated, isAuthorized, logoutUser);
-router.put('/update:id', isAuthenticated, isAuthorized, updateUser);
-router.delete('/delete:id', isAuthenticated, isAuthorized, deleteUser);
+router.put('/:id', isAuthenticated, isAuthorized, updateUser);
+router.delete('/:id', isAuthenticated, isAuthorized, deleteUser);
 
 const userRoutes = router;
 
