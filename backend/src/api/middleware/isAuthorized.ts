@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { getUserById } from '../models/user.model';
 import { getRedisClient } from '@/utils/redis';
 import { redisConfig } from '@/config/redis.config';
+import { getUserFromCache, setUserInCache } from '@/cache/userCache';
 
 export async function isAuthorized(
   req: Request,
@@ -18,21 +19,17 @@ export async function isAuthorized(
         .json({ error: 'Unauthorized: User ID is missing' });
     }
 
-    const cacheduser = await redis.get(`user:${userId}`);
+    const cacheduser = await getUserFromCache(userId);
 
     if (cacheduser) {
-      req.user = JSON.parse(cacheduser);
+      req.user = cacheduser;
     } else {
       const user = await getUserById(userId);
       if (!user) {
         return res.status(404).json({ error: 'User not found' });
       }
 
-      await redis.setex(
-        `user:${userId}`,
-        redisConfig.ttl,
-        JSON.stringify(user)
-      );
+      await setUserInCache(userId, user)
 
       req.user = user;
     }
