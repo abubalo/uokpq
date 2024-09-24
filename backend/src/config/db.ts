@@ -1,15 +1,15 @@
-import { Pool, PoolClient } from 'pg';
+import { Pool, type PoolClient } from 'pg';
 import { logger } from '../utils/logger';
 import { Logging } from '../utils/Logging';
 import Knex from 'knex';
 import { env } from './env';
 
 const pool = new Pool({
-  user: process.env.DB_USERNAME,
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  password: process.env.DB_USERNAME,
-  port: process.env.DB_PORT,
+  user: env.DB_USERNAME,
+  host: env.DB_HOST,
+  database: env.DB_NAME,
+  password: env.DB_PASSWORD,
+  port: env.DB_PORT,
 });
 
 let client: PoolClient | null = null;
@@ -18,10 +18,8 @@ export const connect = async (): Promise<void> => {
   try {
     client = await pool.connect();
     logger.info('Database connected successfully');
-    Logging.info('Database connected successfully');
   } catch (error) {
     logger.error('Failed to connect to the database', error);
-    Logging.error(`Failed to connect to the database ${error}`);
     process.exit(1);
   }
 };
@@ -38,7 +36,6 @@ export const disconnect = async (): Promise<void> => {
     await client.release();
     await pool.end();
     logger.info('Database connection closed');
-    Logging.info('Database connection closed');
   }
 };
 
@@ -52,10 +49,10 @@ pool.on('error', (err) => {
 export const knex = Knex({
   client: 'pg',
   connection: {
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    user: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
+    user: env.DB_USERNAME,
+    host: env.DB_HOST,
+    database: env.DB_NAME,
+    password: env.DB_PASSWORD,
+    port: env.DB_PORT,
   },
 });
