@@ -1,0 +1,400 @@
+paths:
+  /papers:
+    get:
+      summary: Retrieve a list of all papers
+      tags: [Papers]
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+          description: Page number for pagination
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: Number of items per page
+      responses:
+        '200':
+          description: List of papers successfully retrieved
+          content:
+            application/json:    
+              schema:
+                type: object
+                properties:
+                  papers:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Paper'
+                  total:
+                    type: integer
+    post:
+      summary: Add a new paper
+      tags: [Papers]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewPaper'
+      responses:
+        '201':
+          description: Paper successfully added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Paper'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+
+  /papers/{id}:
+    get:
+      summary: Retrieve a paper by ID
+      tags: [Papers]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Paper successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Paper'
+        '404':
+          description: Paper not found
+    put:
+      summary: Update a paper
+      tags: [Papers]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePaper'
+      responses:
+        '200':
+          description: Paper successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Paper'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          description: Paper not found
+    delete:
+    summary: Delete a paper
+    tags: [Papers]
+    security:
+      - bearerAuth: []
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+    responses:
+      '204':
+        description: Paper successfully deleted
+      '401':
+        $ref: '#/components/responses/UnauthorizedError'
+      '403':
+        $ref: '#/components/responses/ForbiddenError'
+      '404':
+        description: Paper not found
+
+
+  /papers/archive/{id}:
+    put:
+      summary: Archive a paper
+      tags: [Papers]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Paper successfully archived
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Paper'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          description: Paper not found
+
+  /papers/search:
+    get:
+      summary: Search for papers
+      tags: [Papers]
+      parameters:
+        - in: query
+          name: query
+          schema:
+            type: string
+          description: Search query string
+        - in: query
+          name: year
+          schema:
+            type: integer
+          description: Filter by year
+        - in: query
+          name: moduleId
+          schema:
+            type: string
+          description: Filter by module ID
+        - in: query
+          name: trimesterId
+          schema:
+            type: string
+          description: Filter by trimester ID
+        - in: query
+          name: lecturerName
+          schema:
+            type: string
+          description: Filter by lecturer name
+        - in: query
+          name: departmentId
+          schema:
+            type: string
+          description: Filter by department ID
+        - in: query
+          name: tags
+          schema:
+            type: array
+            items:
+              type: string
+          description: Filter by tags
+        - in: query
+          name: page
+          schema:
+            type: integer
+          description: Page number for pagination
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: Number of items per page
+        - in: query
+          name: sortBy
+          schema:
+            type: string
+          description: Field to sort by
+        - in: query
+          name: sortOrder
+          schema:
+            type: string
+            enum: [asc, desc]
+          description: Sort order (ascending or descending)
+      responses:
+        '200':
+          description: Search results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  papers:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Paper'
+                  total:
+                    type: integer
+
+  /papers/bookmark:
+    post:
+      summary: Toggle bookmark for a paper
+      tags: [Bookmarks]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                paperId:
+                  type: string
+      responses:
+        '200':
+          description: Bookmark toggled successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  bookmarked:
+                    type: boolean
+                  message:
+                    type: string
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Paper not found
+
+  /papers/bookmarks:
+    get:
+      summary: Get bookmarks for the authenticated user
+      tags: [Bookmarks]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of bookmarks retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Bookmark'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+components:
+  schemas:
+    Paper:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        filePath:
+          type: string
+        year:
+          type: integer
+        courseId:
+          type: string
+        moduleId:
+          type: string
+        trimesterId:
+          type: string
+        lecturerName:
+          type: string
+        uploaderId:
+          type: string
+        isArchive:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    NewPaper:
+      type: object
+      required:
+        - title
+        - filePath
+        - year
+        - courseId
+        - moduleId
+        - trimesterId
+        - lecturerName
+      properties:
+        title:
+          type: string
+        filePath:
+          type: string
+        year:
+          type: integer
+        courseId:
+          type: string
+        moduleId:
+          type: string
+        trimesterId:
+          type: string
+        lecturerName:
+          type: string
+
+    UpdatePaper:
+      type: object
+      properties:
+        title:
+          type: string
+        filePath:
+          type: string
+        year:
+          type: integer
+        courseId:
+          type: string
+        moduleId:
+          type: string
+        trimesterId:
+          type: string
+        lecturerName:
+          type: string
+
+    Bookmark:
+      type: object
+      properties:
+        bookmarkId:
+          type: string
+        userId:
+          type: string
+        paperId:
+          type: string
+        bookmarkedAt:
+          type: string
+          format: date-time
+        paperTitle:
+          type: string
+        filePath:
+          type: string
+        year:
+          type: integer
+        moduleId:
+          type: string
+        trimesterId:
+          type: string
+        lecturerName:
+          type: string
+        uploadedAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        uploaderId:
+          type: string
+        isArchive:
+          type: boolean
+
+  responses:
+    UnauthorizedError:
+      description: Access token is missing or invalid
+    ForbiddenError:
+      description: The server understood the request but refuses trego authorize it
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

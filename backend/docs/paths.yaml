@@ -1,0 +1,5 @@
+/users:
+  $ref: './users.yaml'
+
+/papers:
+  $ref: './papers.yaml'

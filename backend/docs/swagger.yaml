@@ -1,0 +1,31 @@
+openapi: 3.0.0
+info:
+  title: UokPQs API
+  version: 1.0.0
+  description: API for managing University of Kigali academic papers
+
+servers:
+  - url: http://localhost:5000/api/v1
+
+tags:
+  - name: Users
+    description: Operations related to paper users
+  - name: Papers
+    description: Paper management operations
+  - name: Bookmarks
+    description: Operations related to paper bookmarks
+  - name: Admin
+    description: Operations related to paper admin
+
+paths:
+  $ref: 'paths.yaml'
+
+security:
+  - bearerAuth: []
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
