@@ -1,9 +1,11 @@
-import { env } from '@config/env';
+import { env } from './env';
 
 export const redisConfig = {
-  host: process.env.REDIS_HOST || 'localhost',
-  port: parseInt(process.env.REDIS_PORT || '6379', 10),
-  password: process.env.REDIS_PASSWORD,
-  db: parseInt(process.env.REDIS_DB || '0', 10),
-  ttl: parseInt(process.env.REDIS_CACHE_TTL || '3600', 10),
+  host: env.REDIS_HOST,
+  port: env.REDIS_PORT,
+  password: env.REDIS_PASSWORD,
+  username: env.REDIS_USERNAME,
+  ttl: env.REDIS_CACHE_TTL,
+  maxRetriesPerRequest: 10,
+  connectTimeout: 10000,
 };
