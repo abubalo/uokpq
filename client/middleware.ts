@@ -1,28 +1,26 @@
 import { NextResponse } from "next/server";
-import { NextRequest } from "next/server";
+import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
-  const path = request.nextUrl.pathname;
+  const protectedRoutes = ["/dashboard", "/profile", "/settings"];
+  const authRoutes = ["/login", "/register"];
 
-  const publicPaths = [
-    "/login",
-    "/register",
-    "/paper",
-    "/reset-password",
-    "/",
-  ];
-  const isPublicPath = publicPaths.some((publicPath) =>
-    publicPath === "/" ? path === publicPath : path.startsWith(publicPath)
+  const isProtectedRoute = protectedRoutes.some((route) =>
+    request.nextUrl.pathname.startsWith(route)
   );
 
-  const token = request.cookies.get("Bearer")?.value || "";
+  const isAuthRoute = authRoutes.some((route) =>
+    request.nextUrl.pathname.startsWith(route)
+  );
 
-  if (isPublicPath && token) {
-    return NextResponse.redirect(new URL("/", request.nextUrl));
+  const token = request.cookies.get("Bearer");
+
+  if (isProtectedRoute && !token) {
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  if (!isPublicPath && !token) {
-    return NextResponse.redirect(new URL("/login", request.nextUrl));
+  if (isAuthRoute && token) {
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   return NextResponse.next();
@@ -30,12 +28,10 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/",
-    "/login",
-    "/register",
-    "/reset-password",
-    "/paper/:path*",
     "/dashboard/:path*",
     "/profile/:path*",
+    "/settings/:path*",
+    "/login",
+    "/register",
   ],
 };
