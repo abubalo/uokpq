@@ -1,12 +1,14 @@
 "use client";
 
-import React from "react";
+import React, { use, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { FaApple } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import Link from "next/link";
+import { useAuth } from "@/stores/userStore";
+import { useRouter } from "next/navigation";
 
 type Inputs = {
   email: string;
@@ -25,6 +27,9 @@ const schema = yup.object().shape({
 });
 
 const Login: React.FC = () => {
+  const [error, setError] = useState("");
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -33,8 +38,15 @@ const Login: React.FC = () => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data);
+  const { login, error: authError, isLoading } = useAuth();
+
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    try {
+      await login(data);
+      router.push("/")
+    } catch (error) {
+      setError(authError?.message || "Error occured during login");
+    }
   };
 
   return (
@@ -55,6 +67,7 @@ const Login: React.FC = () => {
           <span className="border-b border-gray-600 flex-grow"></span>
         </div>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
+          {error && <p className="text-red-500 text-sm">{error}</p>}
           <div className="">
             <label className="block text-gray-400 mb-2" htmlFor="email">
               Email
@@ -107,7 +120,7 @@ const Login: React.FC = () => {
             type="submit"
             className="w-full py-2 px-4 bg-blue-500 hover:bg-blue-600 rounded-md  font-semibold"
           >
-            Sign in to your account
+            Sign in
           </button>
         </form>
         <p className="text-gray-400 text-sm mt-4">
