@@ -16,11 +16,13 @@ export function usePapers(page: number, limit: number = 10) {
     async () => unwrapApiResponse(await api.fetchPapers(page, limit)),
     {
       enabled: !!page,
+      staleTime: Infinity, // Data will never be considered stale, preventing automatic refetching
+      cacheTime: Infinity, // Keeps the data in the cache indefinitely
       onError: (error) => {
         console.error("Error fetching papers:", error);
         // You could trigger a toast notification or error boundary here
       },
-    } // Ensure query only runs when page is valid
+    }
   );
 }
 
