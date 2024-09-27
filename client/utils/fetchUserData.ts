@@ -6,7 +6,7 @@ export function registerUser(data: Pick<User, "email" | "password">) {
   return makeApiRequest<User>(() => apiClient.post("/users/register", data));
 }
 
-export function loginUser(data: Pick<User, 'email' | 'password'>) {
+export function loginUser(data: Pick<User, "email" | "password">) {
   return makeApiRequest<User>(() => apiClient.post("/users/login", data));
 }
 
