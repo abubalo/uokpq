@@ -1,11 +1,13 @@
 "use client";
-import React from "react";
+import React, { use, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { FaApple } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import Link from "next/link";
+import { useAuth } from "@/stores/userStore";
+import { useRouter } from "next/navigation";
 
 type Inputs = {
   email: string;
@@ -28,7 +30,11 @@ const schema = yup.object().shape({
     .required("Confirm Password is required"),
 });
 
-const Login: React.FC = () => {
+const Register = () => {
+  const [error, setError] = useState("");
+  const router = useRouter();
+
+  const { register: signup, error: authError, isLoading } = useAuth();
   const {
     register,
     handleSubmit,
@@ -37,8 +43,13 @@ const Login: React.FC = () => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data);
+  const onSubmit = async (data: Omit<Inputs, "confirmPass">) => {
+    try {
+      await signup(data);
+      router.push("/");
+    } catch (err) {
+      setError(authError || "An error occurred during signup");
+    }
   };
 
   return (
@@ -59,6 +70,7 @@ const Login: React.FC = () => {
           <span className="border-b border-gray-600 flex-grow"></span>
         </div>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          {error && <p className="text-red-500 text-sm">{error}</p>}
           <div className="">
             <label className="block text-gray-400 mb-2" htmlFor="email">
               Email
@@ -81,7 +93,7 @@ const Login: React.FC = () => {
             </label>
             <input
               id="password"
-              type="password"
+              type="text"
               {...register("password")}
               className={`w-full px-3 py-2 rounded-md ${
                 errors.password ? "border-red-500" : "border-gray-700"
@@ -97,7 +109,7 @@ const Login: React.FC = () => {
             </label>
             <input
               id="confirmPass"
-              type="confirmPass"
+              type="text"
               {...register("confirmPass")}
               className={`w-full px-3 py-2 rounded-md ${
                 errors.confirmPass ? "border-red-500" : "border-gray-700"
@@ -128,4 +140,4 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+export default Register;
