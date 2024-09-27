@@ -7,7 +7,6 @@ type UserAuth = {
   user: User | null;
   isLoading: boolean;
   error: ApiError | null;
-  message?: string;
   login: ({
     email,
     password,
@@ -27,7 +26,8 @@ export const useAuth = create<UserAuth>((set, get) => ({
   user: null,
   isLoading: false,
   error: null,
-  message: "",
+
+
 
   login: async ({ email, password }) => {
     set({ isLoading: true, error: null });
@@ -80,13 +80,6 @@ export const useAuth = create<UserAuth>((set, get) => ({
   fetchProfile: async () => {
     set({ isLoading: true, error: null });
 
-    const { user } = get();
-
-    if (!user) {
-      set({ user: null, error: "User is not logged in!", isLoading: false });
-      return;
-    }
-
     try {
       const response = await api.getUserProfile();
 
@@ -123,7 +116,7 @@ export const useAuth = create<UserAuth>((set, get) => ({
       const response = await api.updateUser(user.id, userData);
 
       if (response.data) {
-        set({ user: { ...user, ...data }, isLoading: false });
+        set({ user: { ...user, ...response.data }, isLoading: false });
       } else {
         set({
           error: response.error,
@@ -148,7 +141,7 @@ export const useAuth = create<UserAuth>((set, get) => ({
     const { user } = get();
 
     if (!user) {
-      set({ user: null, error: response.error, isLoading: false });
+      set({ user: null, error: "User is not logged in", isLoading: false });
       return;
     }
 
