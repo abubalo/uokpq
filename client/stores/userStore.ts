@@ -22,12 +22,15 @@ type UserAuth = {
   clearError: () => void;
 };
 
+const createApiError = (message: string): ApiError => ({
+  message,
+  code: "CUSTOM_ERROR",
+});
+
 export const useAuth = create<UserAuth>((set, get) => ({
   user: null,
   isLoading: false,
   error: null,
-
-
 
   login: async ({ email, password }) => {
     set({ isLoading: true, error: null });
@@ -108,7 +111,7 @@ export const useAuth = create<UserAuth>((set, get) => ({
 
     const { user } = get();
     if (!user) {
-      set({ error: "User is not logged in!", isLoading: false });
+      set({ error: createApiError("User is not logged in"), isLoading: false });
       return;
     }
 
@@ -141,7 +144,11 @@ export const useAuth = create<UserAuth>((set, get) => ({
     const { user } = get();
 
     if (!user) {
-      set({ user: null, error: "User is not logged in", isLoading: false });
+      set({
+        user: null,
+        error: createApiError("User is not logged in"),
+        isLoading: false,
+      });
       return;
     }
 
