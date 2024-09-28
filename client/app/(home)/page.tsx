@@ -4,7 +4,7 @@ import Pagination from "@/components/ui/Pagination";
 import { usePapers } from "@/hooks/usePaperQueries";
 import Papers from "@/components/papers/Papers";
 import Search from "@/components/ui/search/Search";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import PaperCardSkeleton from "@/components/papers/PaperCardSkeleton";
 import Image from "next/image";
 
@@ -49,7 +49,6 @@ export default function Home() {
         </div>
       );
     }
-    
 
     if (!data?.papers || data.papers.length === 0) {
       return (
@@ -69,11 +68,11 @@ export default function Home() {
           Find the Past CAT and Exam Papers
         </h1>
         <p>Discover previous CAT and exam papers to help you prepare better.</p>
-        <Search />
+        <Suspense>
+          <Search />
+        </Suspense>
       </section>
-      <div className="mb-8">
-      {renderContent()}
-      </div>
+      <div className="mb-8">{renderContent()}</div>
       {data && data.totalPage > 1 && (
         <Pagination
           totalPages={data.totalPage}
