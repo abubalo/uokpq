@@ -6,6 +6,7 @@ import Papers from "@/components/papers/Papers";
 import Search from "@/components/ui/search/Search";
 import { useState } from "react";
 import PaperCardSkeleton from "@/components/papers/PaperCardSkeleton";
+import Image from "next/image";
 
 export default function Home() {
   const [page, setPage] = useState(1);
@@ -15,30 +16,50 @@ export default function Home() {
     setPage(pageNumber);
   };
 
-  
-  if (!data) {
-    return ;
-  }
-  
   const renderContent = () => {
+    if (isLoading) {
+      return (
+        <div className="grid grid-cols-1 p-4 md:grid-cols-2 lg:grid-cols-3 gap-8 md:p-0">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <PaperCardSkeleton key={i} />
+          ))}
+        </div>
+      );
+    }
 
     if (error) {
-      console.log(error);
-      return <div>Error loading papers</div>;
+      return (
+        <div className="flex flex-col items-center justify-center gap-4">
+          <Image
+            src="/assets/csc.png"
+            alt="Cute sleeping cat"
+            width={300}
+            height={300}
+            className="rounded-lg shadow-lg"
+          />
+          <span className="text-lg font-semibold">
+            Error loading papers. Please try again later.
+          </span>
+          <button
+            onClick={() => fetchData(page)} // Add a retry functionality
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition"
+          >
+            Retry
+          </button>
+        </div>
+      );
     }
-    return (
-      <>
-        {isLoading ? (
-          <div className="grid grid-cols-1 p-4 md:grid-cols-2 lg:grid-cols-3 gap-8 md:p-0">
-            {[...Array(6)].map((_, i) => (
-              <PaperCardSkeleton key={i} />
-            ))}
-          </div>
-        ) : (
-          <Papers papers={data.papers} />
-        )}
-      </>
-    );
+    
+
+    if (!data?.papers || data.papers.length === 0) {
+      return (
+        <div className="text-center">
+          No papers found. Try adjusting your search.
+        </div>
+      );
+    }
+
+    return <Papers papers={data.papers} />;
   };
 
   return (
@@ -47,14 +68,13 @@ export default function Home() {
         <h1 className="text-3xl font-semibold md:text-5xl">
           Find the Past CAT and Exam Papers
         </h1>
-        <p>
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Excepturi
-          debitis voluptatibus ipsam tempora, incidunt illum laudantium.
-        </p>
+        <p>Discover previous CAT and exam papers to help you prepare better.</p>
         <Search />
       </section>
+      <div className="mb-8">
       {renderContent()}
-      {data.papers && data.papers.length > 0 && (
+      </div>
+      {data && data.totalPage > 1 && (
         <Pagination
           totalPages={data.totalPage}
           currentPage={page}
