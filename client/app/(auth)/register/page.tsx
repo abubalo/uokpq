@@ -48,7 +48,7 @@ const Register = () => {
       await signup(data);
       router.push("/");
     } catch (err) {
-      setError(authError || "An error occurred during signup");
+      setError(authError?.message || "An error occurred during signup");
     }
   };
 
