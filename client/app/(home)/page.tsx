@@ -15,16 +15,17 @@ export default function Home() {
     setPage(pageNumber);
   };
 
-  if (error) {
-    console.log(error);
-    return <div>Error loading papers</div>;
-  }
-
+  
   if (!data) {
     return ;
   }
-
+  
   const renderContent = () => {
+
+    if (error) {
+      console.log(error);
+      return <div>Error loading papers</div>;
+    }
     return (
       <>
         {isLoading ? (
@@ -52,15 +53,7 @@ export default function Home() {
         </p>
         <Search />
       </section>
-      {isLoading ? (
-        <div className="grid grid-cols-1 p-4 md:grid-cols-2 lg:grid-cols-3 gap-8 md:p-0">
-          {[...Array(6)].map((_, i) => (
-            <PaperCardSkeleton key={i} />
-          ))}
-        </div>
-      ) : (
-        <Papers papers={data.papers} />
-      )}
+      {renderContent()}
       {data.papers && data.papers.length > 0 && (
         <Pagination
           totalPages={data.totalPage}
