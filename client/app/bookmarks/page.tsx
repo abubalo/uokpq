@@ -1,41 +1,55 @@
-"use client"
+"use client";
 import React from "react";
 import Papers from "@/components/papers/Papers";
-import Footer from "@/components/ui/Footer";
-import Header from "@/components/ui/Header";
 import { useFetchBookmarks } from "@/hooks/usePaperQueries";
 import { useAuth } from "@/stores/userStore";
+import PaperCardSkeleton from "@/components/papers/PaperCardSkeleton";
+import Login from "../(auth)/login/page";
 
-const BookmarksContent: React.FC<{userId: string}> = ({ userId }) => {
+const BookmarksContent: React.FC<{ userId: string }> = ({ userId }) => {
   const { data, isLoading, error } = useFetchBookmarks(userId);
-  
-  if (error) {
-    return <div>Error occurred</div>;
-  }
 
   if (isLoading) {
-    return <>Loading...</>;
+    return (
+      <div className="grid grid-cols-1 p-4 md:grid-cols-2 lg:grid-cols-3 gap-8 md:p-0">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <PaperCardSkeleton key={i} />
+        ))}
+      </div>
+    );
   }
 
-  if (!data) {
-    return <>No data</>;
+  if (error) {
+    return (
+      <div className="flex justify-center items-center flex-col gap-3">
+        Error occurred while feching papers. Please try again later.
+      </div>
+    );
   }
 
-  return <Papers papers={data} />;
+  if (!data?.papers || data.papers.length === 0) {
+    return (
+      <div className="flex justify-center items-center flex-col gap-3">
+        No papers available!
+      </div>
+    );
+  }
+
+  return <Papers papers={data.papers} />;
 };
 
 const Bookmarks = () => {
   const { user } = useAuth();
 
   if (!user) {
-    return <div>Please log in to view bookmarks</div>;
+    return <Login />;
   }
 
   return (
     <main>
-      <Header />
-      <BookmarksContent userId={user.id} />
-      <Footer />
+      <section className="container mx-auto my-8 h-auto min-h-dvh md:my-12">
+        <BookmarksContent userId={user.id} />
+      </section>
     </main>
   );
 };
