@@ -25,12 +25,14 @@ export async function isAuthenticated(
     return;
   }
 
-  const { value: user, errorMessage } = await verifyJwtToken(token);
+  const result = await verifyJwtToken(token);
 
-  if (!user) {
-    res.status(401).json({ error: errorMessage || 'Invalid token!' });
+  if (!result.success) {
+    res.status(401).json({ error: result.errorMessage || 'Invalid token!' });
     return;
   }
+
+  const user = result.value
 
   req.userId = user.id;
   next();

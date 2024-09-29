@@ -1,7 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
 import { getUserById } from '../models/user.model';
-import { getRedisClient } from '@/utils/redis';
-import { redisConfig } from '@/config/redis.config';
 import { getUserFromCache, setUserInCache } from '@/cache/userCache';
 
 export async function isAuthorized(
@@ -9,7 +7,6 @@ export async function isAuthorized(
   res: Response,
   next: NextFunction
 ) {
-  const redis = getRedisClient();
   try {
     const { userId } = req;
 
@@ -29,7 +26,7 @@ export async function isAuthorized(
         return res.status(404).json({ error: 'User not found' });
       }
 
-      await setUserInCache(userId, user)
+      await setUserInCache(userId, user);
 
       req.user = user;
     }
