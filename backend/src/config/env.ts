@@ -1,5 +1,5 @@
 import { cleanEnv, num, str, url } from 'envalid';
-import {config} from "dotenv"
+import { config } from 'dotenv';
 
 config();
 
@@ -23,6 +23,6 @@ export const env = cleanEnv(process.env, {
   SECRET_ACCESS_KEY: str(),
   BUCKET_NAME: str(),
   R2_ENDPOINT: url(),
-  LOG_LEVEL: str()
+  LOG_LEVEL: str(),
+  RABBITMQ_URL: str({ default: 'amqp://localhost' }),
 });
-
