@@ -8,6 +8,7 @@ import { FcGoogle } from "react-icons/fc";
 import Link from "next/link";
 import { useAuth } from "@/stores/userStore";
 import { useRouter } from "next/navigation";
+import Spinner from "@/components/ui/loader/Spinner";
 
 type Inputs = {
   email: string;
@@ -126,7 +127,7 @@ const Register = () => {
             type="submit"
             className="w-full py-2 px-4 bg-blue-500 hover:bg-blue-600 rounded-md  font-semibold"
           >
-            Sign in to your account
+            {isLoading ? <Spinner /> : "Sign up"}
           </button>
         </form>
         <p className="text-gray-400 text-sm mt-4">
