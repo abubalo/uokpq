@@ -19,7 +19,6 @@ const handleFailure = <T>(res: Response, data: T, statusCode: number) => {
   res.status(statusCode).json(data);
 };
 
-
 export async function addUser(req: Request, res: Response): Promise<void> {
   try {
     const user: User = req.body;
@@ -38,15 +37,15 @@ export async function addUser(req: Request, res: Response): Promise<void> {
 
     const newUser = await userModel.createUser(user);
     const token = await generateJwtToken(newUser);
-    console.log(token)
+    console.log(token);
 
     res
       .cookie('Bearer', token, {
         maxAge: env.SESSION_MAX_AGE,
         httpOnly: true,
         secure: env.isProd,
-        path: "/",
-        sameSite: 'strict',
+        path: '/',
+        sameSite: 'lax',
       })
       .status(201)
       .json({ data: newUser });
@@ -57,6 +56,34 @@ export async function addUser(req: Request, res: Response): Promise<void> {
         ? 'Database error occurred'
         : 'Internal server error';
     return handleFailure(res, { error: errorMessage }, 500);
+  }
+}
+
+export async function getUser(req: Request, res: Response): Promise<void> {
+  try {
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return handleFailure(
+        res,
+        { message: 'Unauthorized: ID is missing' },
+        401
+      );
+    }
+
+    const user = await userModel.getUserById(userId);
+
+    if (!user) {
+      return handleFailure(res, { message: 'Something went wrong' }, 500);
+    }
+
+    return handleSuccess(res, user, 200);
+  } catch (error) {
+    console.log('Login error: ', error);
+    if (error instanceof DatabaseError) {
+      return handleFailure(res, { error: 'Database error occurred' }, 500);
+    }
+    return handleFailure(res, { error: 'Internal server error' }, 500);
   }
 }
 
@@ -87,9 +114,10 @@ export async function loginUser(req: Request, res: Response): Promise<void> {
         maxAge: env.SESSION_MAX_AGE,
         httpOnly: true,
         secure: env.isProd,
-        sameSite: 'strict',
+        path: '/',
+        sameSite: 'lax',
       })
-      .json({ data: user, message: 'Successfuly logged in!' });
+      .json(user);
   } catch (error) {
     console.log('Login error: ', error);
     if (error instanceof DatabaseError) {
@@ -104,7 +132,7 @@ export async function _logoutUser(_: Request, res: Response) {
     res.clearCookie('Bearer', {
       httpOnly: true,
       secure: env.isProd,
-      sameSite: 'strict',
+      sameSite: 'lax',
     });
 
     handleSuccess(res, { message: 'Successefully logged out!' }, 200);
@@ -120,37 +148,35 @@ export async function _logoutUser(_: Request, res: Response) {
 export async function logoutUser(req: Request, res: Response) {
   try {
     const token = req.cookies['Bearer'];
-    
+
     if (!token) {
       return handleFailure(res, { error: 'No token provided' }, 401);
     }
 
-    const { value: decodedToken, errorMessage } = await verifyJwtToken(token);
+    const result = await verifyJwtToken(token);
 
-    if (!decodedToken) {
-      return handleFailure(res, { error: errorMessage || 'Invalid token' }, 401);
+    if (!result.success) {
+      return handleFailure(
+        res,
+        { error: result.errorMessage || 'Invalid token' },
+        401
+      );
     }
 
     const currentTime = Math.floor(Date.now() / 1000);
-    const timeToLive = decodedToken.exp - currentTime;
-
-    await blacklistToken(token, timeToLive);
+    const timeToLive = result.exp - currentTime;
 
     res.clearCookie('Bearer', {
       httpOnly: true,
       secure: env.isProd,
-      sameSite: 'strict',
+      sameSite: 'lax',
     });
 
     handleSuccess(res, { message: 'Successfully logged out!' }, 200);
   } catch (error) {
     console.log('Logout error: ', error);
-    
-    return handleFailure(
-      res,
-      { error: 'Internal server error' },
-      500
-    );
+
+    return handleFailure(res, { error: 'Internal server error' }, 500);
   }
 }
 
