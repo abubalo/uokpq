@@ -41,7 +41,7 @@ export default function Home() {
             Error loading papers. Please try again later.
           </span>
           <button
-            onClick={() => fetchData(page)} // Add a retry functionality
+            onClick={() => fetchData(page)}
             className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition"
           >
             Retry
@@ -62,24 +62,24 @@ export default function Home() {
   };
 
   return (
-    <main className="w-full h-auto min-h-dvh">
-      <section className="container mx-auto flex gap-4 items-center justify-center flex-col h-96">
-        <h1 className="text-3xl font-semibold md:text-5xl">
-          Find the Past CAT and Exam Papers
-        </h1>
-        <p>Discover previous CAT and exam papers to help you prepare better.</p>
-        <Suspense>
+    <Suspense fallback={<div>Loading page...</div>}>
+      <main className="w-full h-auto min-h-dvh">
+        <section className="container mx-auto flex gap-4 items-center justify-center flex-col h-96">
+          <h1 className="text-3xl font-semibold md:text-5xl">
+            Find the Past CAT and Exam Papers
+          </h1>
+          <p>Discover previous CAT and exam papers to help you prepare better.</p>
           <Search />
-        </Suspense>
-      </section>
-      <div className="mb-8">{renderContent()}</div>
-      {data && data.totalPage > 1 && (
-        <Pagination
-          totalPages={data.totalPage}
-          currentPage={page}
-          onPageChange={fetchData}
-        />
-      )}
-    </main>
+        </section>
+        <div className="mb-8">{renderContent()}</div>
+        {data && data.totalPage > 1 && (
+          <Pagination
+            totalPages={data.totalPage}
+            currentPage={page}
+            onPageChange={fetchData}
+          />
+        )}
+      </main>
+    </Suspense>
   );
 }
