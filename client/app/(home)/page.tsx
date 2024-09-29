@@ -29,7 +29,7 @@ export default function Home() {
 
     if (error) {
       return (
-        <div className="flex flex-col items-center justify-center gap-4">
+        <div className="flex flex-col items-center justify-center ">
           <Image
             src="/assets/csc.png"
             alt="Cute sleeping cat"
@@ -37,7 +37,7 @@ export default function Home() {
             height={300}
             className="rounded-lg shadow-lg"
           />
-          <span className="text-lg font-semibold">
+          <span className="text-lg font-semibold text-red-500">
             Error loading papers. Please try again later.
           </span>
           <button
@@ -52,8 +52,17 @@ export default function Home() {
 
     if (!data?.papers || data.papers.length === 0) {
       return (
-        <div className="text-center">
-          No papers found. Try adjusting your search.
+        <div className="flex flex-col items-center justify-center ">
+          <Image
+            src="/assets/csc.png"
+            alt="Cute sleeping cat"
+            width={300}
+            height={300}
+            className="rounded-lg shadow-lg"
+          />
+          <span className="text-lg font-semibold">
+            No papers found. Try adjusting your search.
+          </span>
         </div>
       );
     }
@@ -63,9 +72,9 @@ export default function Home() {
 
   return (
     <Suspense fallback={<div>Loading page...</div>}>
-      <main className="container mx-auto h-auto min-h-dvh">
-        <section className="w-full flex items-center gap-12 justify-center px-4 py-6 flex-col mb-8 md:mb-18 md:py-0 md:px-0 md:h-96">
-          <div className="text-center space-4">
+      <main className="container mx-auto h-auto min-h-dvh space-y-8">
+        <section className="w-full flex items-center gap-12 justify-center px-4 py-6 flex-col md:py-0 md:px-0 md:h-80">
+          <div className="text-center space-y-2">
             <h1 className="mx-auto text-2xl font-semibold md:text-5xl lg:m-full lg:text-5xl">
               Find the Past CAT and Exam Papers
             </h1>
@@ -75,7 +84,7 @@ export default function Home() {
           </div>
           <Search />
         </section>
-        <section className="mb-8">{renderContent()}</section>
+        <section className="">{renderContent()}</section>
         <section>
           {data && data.totalPage > 1 && (
             <Pagination
