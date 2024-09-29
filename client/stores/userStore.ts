@@ -10,9 +10,11 @@ type UserAuth = {
   login: ({
     email,
     password,
+    rememberMe
   }: {
     email: string;
     password: string;
+    rememberMe: boolean;
   }) => Promise<void>;
 
   register: (userData: Pick<User, "email" | "password">) => Promise<void>;
@@ -32,10 +34,10 @@ export const useAuth = create<UserAuth>((set, get) => ({
   isLoading: false,
   error: null,
 
-  login: async ({ email, password }) => {
+  login: async ({ email, password, rememberMe }) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await api.loginUser({ email, password });
+      const response = await api.loginUser({ email, password, rememberMe });
 
       if (response.data) {
         set({ user: response.data, isLoading: false });
