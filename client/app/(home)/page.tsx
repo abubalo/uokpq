@@ -63,22 +63,28 @@ export default function Home() {
 
   return (
     <Suspense fallback={<div>Loading page...</div>}>
-      <main className="w-full h-auto min-h-dvh">
-        <section className="container mx-auto flex gap-4 items-center justify-center flex-col h-96">
-          <h1 className="text-3xl font-semibold md:text-5xl">
-            Find the Past CAT and Exam Papers
-          </h1>
-          <p>Discover previous CAT and exam papers to help you prepare better.</p>
+      <main className="container mx-auto h-auto min-h-dvh">
+        <section className="w-full flex items-center gap-12 justify-center px-4 py-6 flex-col mb-8 md:mb-18 md:py-0 md:px-0 md:h-96">
+          <div className="text-center space-4">
+            <h1 className="mx-auto text-2xl font-semibold md:text-5xl lg:m-full lg:text-5xl">
+              Find the Past CAT and Exam Papers
+            </h1>
+            <p className="">
+              Discover previous CAT and exam papers to help you prepare better.
+            </p>
+          </div>
           <Search />
         </section>
-        <div className="mb-8">{renderContent()}</div>
-        {data && data.totalPage > 1 && (
-          <Pagination
-            totalPages={data.totalPage}
-            currentPage={page}
-            onPageChange={fetchData}
-          />
-        )}
+        <section className="mb-8">{renderContent()}</section>
+        <section>
+          {data && data.totalPage > 1 && (
+            <Pagination
+              totalPages={data.totalPage}
+              currentPage={page}
+              onPageChange={fetchData}
+            />
+          )}
+        </section>
       </main>
     </Suspense>
   );
