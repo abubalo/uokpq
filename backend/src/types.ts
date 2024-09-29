@@ -5,7 +5,7 @@ export type ResponseData<T> = {
 };
 
 export type User = {
-  id: string | number;
+  id: number;
   email: string;
   password: string;
   schoolId?: string;
@@ -81,7 +81,7 @@ export type Role = {
 declare global {
   namespace Express {
     interface Request {
-      userId?: string | number;
+      userId?: number;
       user?: User;
       apiVersion?: string;
       fileUrl?: string;
