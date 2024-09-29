@@ -9,6 +9,7 @@ import { FcGoogle } from "react-icons/fc";
 import Link from "next/link";
 import { useAuth } from "@/stores/userStore";
 import { useRouter } from "next/navigation";
+import Spinner from "@/components/ui/loader/Spinner";
 
 type Inputs = {
   email: string;
@@ -23,11 +24,12 @@ const schema = yup.object().shape({
   password: yup
     .string()
     .min(6, "Password must be at least 6 characters")
-    .required("Password is required"),
+    .required("Password is required")
 });
 
 const Login: React.FC = () => {
   const [error, setError] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
   const router = useRouter();
 
   const {
@@ -42,8 +44,8 @@ const Login: React.FC = () => {
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
-      await login(data);
-      router.push("/")
+      await login({...data, rememberMe});
+      router.push("/");
     } catch (error) {
       setError(authError?.message || "Error occured during login");
     }
@@ -104,9 +106,15 @@ const Login: React.FC = () => {
             <label className="flex items-center text-gray-400">
               <input
                 type="checkbox"
+                checked={rememberMe}
                 className="form-checkbox bg-gray-700 text-blue-500 border-gray-600"
               />
-              <span className="text-sm ml-2">Remember me</span>
+              <span
+                className="text-sm ml-2"
+                onClick={() => setRememberMe(!rememberMe)}
+              >
+                Remember me
+              </span>
             </label>
             <Link
               href="/reset-password"
@@ -120,7 +128,7 @@ const Login: React.FC = () => {
             type="submit"
             className="w-full py-2 px-4 bg-blue-500 hover:bg-blue-600 rounded-md  font-semibold"
           >
-            Sign in
+            {isLoading ? <Spinner /> : "Sign in"}
           </button>
         </form>
         <p className="text-gray-400 text-sm mt-4">
