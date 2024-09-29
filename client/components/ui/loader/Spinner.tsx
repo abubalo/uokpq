@@ -1,28 +1,37 @@
 import React from 'react';
 
-const Spinner: React.FC = () => {
+type SizeClass = 'sm' | 'md' | 'lg';
+type ColorClass = 'blue' | 'green' | 'red' | 'yellow';
+
+interface LoadingSpinnerProps {
+  size?: SizeClass;
+  color?: ColorClass;
+}
+
+const sizeClasses: Record<SizeClass, string> = {
+  sm: 'w-4 h-4',
+  md: 'w-8 h-8',
+  lg: 'w-12 h-12',
+};
+
+const colorClasses: Record<ColorClass, string> = {
+  blue: 'border-blue-500',
+  green: 'border-green-500',
+  red: 'border-red-500',
+  yellow: 'border-yellow-500',
+};
+
+const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
+  size = 'md',
+  color = 'blue',
+}) => {
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <div className="w-16 h-16 border-t-4 border-b-4 border-blue-500 rounded-full animate-bounce-subtle"></div>
-
-      <style jsx>{`
-        @keyframes bounceSubtle {
-          0%, 100% {
-            transform: translateY(-25%);
-            opacity: 0.8;
-          }
-          50% {
-            transform: translateY(0);
-            opacity: 1;
-          }
-        }
-
-        .animate-bounce-subtle {
-          animation: bounceSubtle 1.5s ease-in-out infinite;
-        }
-      `}</style>
+    <div className="flex justify-center items-center">
+      <div
+        className={`${sizeClasses[size]} border-2 ${colorClasses[color]} border-t-transparent rounded-full animate-spin`}
+      ></div>
     </div>
   );
 };
 
-export default Spinner;
+export default LoadingSpinner;
