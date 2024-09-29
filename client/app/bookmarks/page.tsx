@@ -27,7 +27,7 @@ const BookmarksContent: React.FC<{ userId: string }> = ({ userId }) => {
     );
   }
 
-  if (!data?.papers || data.papers.length === 0) {
+  if (!data || data.papers.length === 0) {
     return (
       <div className="flex justify-center items-center flex-col gap-3">
         No papers available!
