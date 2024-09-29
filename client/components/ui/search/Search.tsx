@@ -66,7 +66,7 @@ const Search: React.FC = () => {
   return (
     <div
       ref={containerRef}
-      className="relative hidden w-full md:max-w-md lg:max-w-2xl md:block"
+      className="relative w-full md:max-w-md lg:max-w-2xl"
     >
       <div className="relative flex items-center">
         <input
