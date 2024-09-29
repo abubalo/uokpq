@@ -1,10 +1,9 @@
-import Sidebar from "@/components/dashboard/Sidebar";
 import Button from "@/components/ui/button/Button";
 import Link from "next/link";
 import React from "react";
 import Table from "@/components/dashboard/Table";
-import StatsCard from "@/components/admin-widgets/StatsCard";
 import { GoogleDocIcon } from "@/components/shared/Icons";
+import StatsCard from "@/components/dashboard/StatsCard";
 
 const Dashboard = () => {
   const data = [
