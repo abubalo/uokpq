@@ -2,18 +2,16 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { FiSun, FiMoon } from "react-icons/fi";
-import Search from "./search/Search";
 import Image from "next/image";
 import Link from "next/link";
 import Avatar from "../profile/Avatar";
-import MobileSearch from "./search/MobileSearch";
 import { AnimatePresence, motion } from "framer-motion";
 import { useAuth } from "@/stores/userStore";
+import HamburgerToCancel from "./HamburgerToCancel";
 
 const Header = () => {
   const [darkMode, setDarkMode] = useState(false);
   const [isNavOpen, setIsNavOpen] = useState(false);
-  const [onSearchFocus, setOnsearchFocus] = useState(false);
 
   const { user } = useAuth();
 
@@ -21,21 +19,9 @@ const Header = () => {
     setIsNavOpen(!isNavOpen);
   };
 
-  const handleSearch = (query: string) => {};
-
-  const handleSearchFocus = (isFocused?: boolean) => {
-    setOnsearchFocus(true || isFocused);
-  };
-  const handleSearchBlur = () => {
-    setOnsearchFocus(false);
-  };
-
   useEffect(() => {
-    // Check for saved preference or system preference
     const savedMode = localStorage.getItem("darkMode");
-    const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    ).matches;
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
 
     setDarkMode(savedMode === "true" || (savedMode === null && prefersDark));
   }, []);
@@ -72,7 +58,6 @@ const Header = () => {
       <nav className="hidden px-4 py-3 md:block bg-neutral-800/70 backdrop-blur-md border-b border-gray-200/30">
         <div className="flex items-center justify-between">
           {/* Logo */}
-
           <Link href="/" aria-label="website logo" className="flex-shrink-0">
             <Image src="/uokpq.svg" alt="uokpq logo" width={80} height={80} />
           </Link>
@@ -82,15 +67,9 @@ const Header = () => {
             <button
               onClick={toggleDarkMode}
               className="p-2 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-700/50 transition-colors"
-              aria-label={
-                darkMode ? "Switch to light mode" : "Switch to dark mode"
-              }
+              aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
             >
-              {darkMode ? (
-                <FiSun className="text-yellow-400" size={24} />
-              ) : (
-                <FiMoon className="text-gray-600" size={24} />
-              )}
+              {darkMode ? <FiSun className="text-yellow-400" size={24} /> : <FiMoon className="text-gray-600" size={24} />}
             </button>
             {user ? (
               <Avatar
@@ -99,28 +78,29 @@ const Header = () => {
                 size="sm"
               />
             ) : (
-              <Link
-                href="/login"
-                className="hidden border px-4 py-2 rounded-full transition-colors md:block hover:bg-blue-500/70"
-                aria-label="Login"
-              >
+              <Link href="/login" className="hidden border px-4 py-2 rounded-full transition-colors md:block hover:bg-blue-500/70" aria-label="Login">
                 Login
               </Link>
             )}
           </div>
         </div>
       </nav>
+
       {/* Mobile Navbar */}
-      <div className="block sticky top-0 px-4 py-3 bg-neutral-800/70 border-b border-neutral-300/40 backdrop-blur-lg md:hidden">
-        <MobileSearch
-          onOpen={handleNavOpen}
-          isFocused={onSearchFocus}
-          onSearchFocus={handleSearchFocus}
-          onSearchBlur={handleSearchBlur}
-          searchQuery=""
-          onSearchChange={handleSearch}
-        />
+      <div className="flex justify-between items-center top-0 px-4 py-3 bg-neutral-800/70 border-b border-neutral-300/40 backdrop-blur-lg md:hidden">
+        <HamburgerToCancel isOpen={isNavOpen} onOpen={handleNavOpen} />
+        <button
+          aria-label="profile settings"
+          className="flex items-center pr-3"
+        >
+          <Avatar
+            src="https://plus.unsplash.com/premium_photo-1683140618951-6232339fdb97?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            alt=""
+            size="sm"
+          />
+        </button>
       </div>
+
       <AnimatePresence>
         {isNavOpen && (
           <>
@@ -163,17 +143,9 @@ const Header = () => {
                     <button
                       onClick={toggleDarkMode}
                       className="p-2 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-700/50 transition-colors"
-                      aria-label={
-                        darkMode
-                          ? "Switch to light mode"
-                          : "Switch to dark mode"
-                      }
+                      aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
                     >
-                      {darkMode ? (
-                        <FiSun className="text-yellow-400" size={20} />
-                      ) : (
-                        <FiMoon className="text-gray-600" size={20} />
-                      )}
+                      {darkMode ? <FiSun className="text-yellow-400" size={20} /> : <FiMoon className="text-gray-600" size={20} />}
                     </button>
                   </li>
                 </ul>
