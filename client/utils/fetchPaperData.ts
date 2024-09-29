@@ -31,7 +31,7 @@ export function toggleBookmark(data: { userId: string; paperId: string }) {
 }
 
 export function fetchBookmarks(userId?: string) {
-  return makeApiRequest<Paper[]>(() =>
+  return makeApiRequest<PapersData>(() =>
     apiClient.get(`/papers/bookmarks/${userId}`)
   );
 }
