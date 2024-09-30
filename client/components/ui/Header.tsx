@@ -8,6 +8,9 @@ import Avatar from "../profile/Avatar";
 import { AnimatePresence, motion } from "framer-motion";
 import { useAuth } from "@/stores/userStore";
 import HamburgerToCancel from "./HamburgerToCancel";
+import DropdownMenu from "./Dropdown/Dropdown";
+import { FaBookmark, FaUser } from "react-icons/fa";
+import { IoIosLogOut } from "react-icons/io";
 
 const Header = () => {
   const [darkMode, setDarkMode] = useState(false);
@@ -21,7 +24,9 @@ const Header = () => {
 
   useEffect(() => {
     const savedMode = localStorage.getItem("darkMode");
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const prefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
 
     setDarkMode(savedMode === "true" || (savedMode === null && prefersDark));
   }, []);
@@ -53,6 +58,34 @@ const Header = () => {
     };
   }, [isNavOpen]);
 
+  const dropdownItems = [
+    {
+      label: (
+        <Link href="/profile" className="flex gap-2 items-center">
+          <FaUser /> Profile
+        </Link>
+      ),
+      onClick: () => console.log("Option 1 clicked"),
+    },
+    {
+      label: (
+        <Link href="/bookmaks" className="flex items-center gap-2">
+          <FaBookmark /> My Bookmarks
+        </Link>
+      ),
+      onClick: () => console.log("Option 2 clicked"),
+    },
+    {
+      label: (
+        <Link href="/" className="flex items-center gap-2 text-red-500 border-t border-red-500">
+          <IoIosLogOut  />
+          Log Out
+        </Link>
+      ),
+      onClick: () => console.log("Option 3 clicked"),
+    },
+  ];
+
   return (
     <header className="w-full sticky top-0 z-40">
       <nav className="hidden px-4 py-3 md:block bg-neutral-800/70 backdrop-blur-md border-b border-gray-200/30">
@@ -67,18 +100,35 @@ const Header = () => {
             <button
               onClick={toggleDarkMode}
               className="p-2 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-700/50 transition-colors"
-              aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+              aria-label={
+                darkMode ? "Switch to light mode" : "Switch to dark mode"
+              }
             >
-              {darkMode ? <FiSun className="text-yellow-400" size={24} /> : <FiMoon className="text-gray-600" size={24} />}
+              {darkMode ? (
+                <FiSun className="text-yellow-400" size={24} />
+              ) : (
+                <FiMoon className="text-gray-600" size={24} />
+              )}
             </button>
             {user ? (
-              <Avatar
-                src="https://plus.unsplash.com/premium_photo-1683140618951-6232339fdb97?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                alt="User Avatar"
-                size="sm"
-              />
+              <>
+                <DropdownMenu
+                  label={
+                    <Avatar
+                      src="https://plus.unsplash.com/premium_photo-1683140618951-6232339fdb97?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                      alt="User Avatar"
+                      size="sm"
+                    />
+                  }
+                  items={dropdownItems}
+                />
+              </>
             ) : (
-              <Link href="/login" className="hidden border px-4 py-2 rounded-full transition-colors md:block hover:bg-blue-500/70" aria-label="Login">
+              <Link
+                href="/login"
+                className="hidden border px-4 py-2 rounded-full transition-colors md:block hover:bg-blue-500/70"
+                aria-label="Login"
+              >
                 Login
               </Link>
             )}
@@ -143,9 +193,17 @@ const Header = () => {
                     <button
                       onClick={toggleDarkMode}
                       className="p-2 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-700/50 transition-colors"
-                      aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+                      aria-label={
+                        darkMode
+                          ? "Switch to light mode"
+                          : "Switch to dark mode"
+                      }
                     >
-                      {darkMode ? <FiSun className="text-yellow-400" size={20} /> : <FiMoon className="text-gray-600" size={20} />}
+                      {darkMode ? (
+                        <FiSun className="text-yellow-400" size={20} />
+                      ) : (
+                        <FiMoon className="text-gray-600" size={20} />
+                      )}
                     </button>
                   </li>
                 </ul>
