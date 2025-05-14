@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useEffect, useState } from "react";
 import axios, { AxiosError } from "axios";
 import { getPDF, savePDF } from "@/indexedDBUtils";
@@ -21,7 +21,7 @@ export const usePdfFetcher = (paperUrl: string | undefined) => {
           setPdfUrl(URL.createObjectURL(cachedPdf));
         } else {
           const response = await axios.get<Blob>(
-            "https://pub-2fe06c28f94d40f3ba92e350ada984e5.r2.dev/dummy.pdf",
+            "https://pub-2fe06c28f94d40f3ba92e350ada984e5.r2.dev/lorem-ipsum.pdf",
             { responseType: "blob" }
           );
 

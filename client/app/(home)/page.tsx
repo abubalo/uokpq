@@ -1,16 +1,27 @@
 "use client";
-
 import Pagination from "@/components/ui/Pagination";
 import { usePapers } from "@/hooks/usePaperQueries";
-import Papers from "@/components/papers/Papers";
+import PapersList from "@/components/papers/PaperList";
 import Search from "@/components/ui/search/Search";
 import { Suspense, useState } from "react";
 import PaperCardSkeleton from "@/components/papers/PaperCardSkeleton";
 import Image from "next/image";
+import DropdownMenu from "@/components/ui/Dropdown/Dropdown";
 
 export default function Home() {
   const [page, setPage] = useState(1);
-  const { data, error, isLoading } = usePapers(page);
+  
+  const { 
+    data, 
+    isLoading, 
+    isError, 
+    error 
+  } = usePapers({
+    page,
+    limit: 10,
+  });
+  console.log("Paper Data: ",data?.papers)
+
 
   const fetchData = (pageNumber: number) => {
     setPage(pageNumber);
@@ -67,7 +78,7 @@ export default function Home() {
       );
     }
 
-    return <Papers papers={data.papers} />;
+    return <PapersList papers={data.papers} />;
   };
 
   return (
@@ -86,9 +97,9 @@ export default function Home() {
         </section>
         <section className="">{renderContent()}</section>
         <section>
-          {data && data.totalPage > 1 && (
+          {data && data.totalPages > 1 && (
             <Pagination
-              totalPages={data.totalPage}
+              totalPages={data.totalPages}
               currentPage={page}
               onPageChange={fetchData}
             />

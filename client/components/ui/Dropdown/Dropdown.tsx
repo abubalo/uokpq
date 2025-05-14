@@ -1,3 +1,4 @@
+"use client"
 import React, { useState, useRef, useEffect, ReactNode } from "react";
 import { twMerge } from "tailwind-merge";
 
@@ -72,7 +73,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
     >
       <button
         type="button"
-        className="inline-flex justify-center w-full rounded-md text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        className="inline-flex justify-center w-full rounded-md text-sm font-medium"
         onClick={toggleDropdown}
         aria-haspopup="true"
         aria-expanded={isOpen}

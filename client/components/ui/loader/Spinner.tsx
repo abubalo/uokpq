@@ -1,3 +1,4 @@
+import { cn } from '@/lib/utils';
 import React from 'react';
 
 type SizeClass = 'sm' | 'md' | 'lg';
@@ -6,6 +7,7 @@ type ColorClass = 'blue' | 'green' | 'red' | 'yellow';
 interface LoadingSpinnerProps {
   size?: SizeClass;
   color?: ColorClass;
+  className?: string;
 }
 
 const sizeClasses: Record<SizeClass, string> = {
@@ -24,11 +26,12 @@ const colorClasses: Record<ColorClass, string> = {
 const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   size = 'md',
   color = 'blue',
+  className= "",
 }) => {
   return (
     <div className="flex justify-center items-center">
       <div
-        className={`${sizeClasses[size]} border-2 ${colorClasses[color]} border-t-transparent rounded-full animate-spin`}
+        className={cn(className, sizeClasses[size], `border-2 ${colorClasses[color]} border-t-transparent rounded-full animate-spin`)}
       ></div>
     </div>
   );

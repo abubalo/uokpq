@@ -13,6 +13,9 @@ const nextConfig = {
       {
         hostname: "images.pexels.com",
       },
+      {
+        hostname: "cdn.sanity.io",
+      },
     ],
   },
   webpack: (config) => {

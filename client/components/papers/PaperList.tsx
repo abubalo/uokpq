@@ -1,8 +1,9 @@
-import { Paper } from "@/types";
+import { Paper } from "@/types/sanity";
 import React from "react";
 import PaperCard from "./PaperCard";
+import { urlForImage } from "@/lib/sanity";
 
-const Papers: React.FC<{ papers: Paper[] }> = ({ papers }) => {
+const PapersList: React.FC<{ papers: Paper[] }> = ({ papers }) => {
   return (
     <section className="container mx-auto h-full min-h-dvh flex flex-col">
       <div className="grid grid-cols-1 p-4 md:grid-cols-2 lg:grid-cols-3 gap-3 mt-6 md:p-0">
@@ -11,15 +12,15 @@ const Papers: React.FC<{ papers: Paper[] }> = ({ papers }) => {
         ) : (
           papers?.map((paper) => (
             <PaperCard
-              key={paper.id}
-              id={paper.id}
+              key={paper._id}
+              id={paper._id}
               src={paper.thumbnail}
-              title={paper.title}
-              lecturer={paper.lecturerName}
-              date={paper.updatedAt}
-              url={paper.filePath}
-              tags={paper.tags}
-              bookmarked={paper.isBookmarked}
+              title={paper.moduleTitle}
+              lecturer={paper.lecturer?.name}
+              date={paper._createdAt}
+              url={paper.pdfFile?.asset.url}
+              tags={paper?.tags}
+              bookmarked={true}
             />
           ))
         )}
@@ -28,4 +29,4 @@ const Papers: React.FC<{ papers: Paper[] }> = ({ papers }) => {
   );
 };
 
-export default Papers;
+export default PapersList;

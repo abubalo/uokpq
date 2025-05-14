@@ -1,9 +1,9 @@
-import { Paper, PapersData } from "@/types";
+import { Paper, PapersData, PaperValues } from "@/types";
 import { apiClient } from "./apiClient";
 import { makeApiRequest } from "./makeRequest";
 
-export function addPaper() {
-  return makeApiRequest<Paper>(() => apiClient.post("/paper"));
+export function addPaper(data: PaperValues) {
+  return makeApiRequest<Paper>(() => apiClient.post("/paper", { data }));
 }
 
 export function fetchPapers(page = 1, limit: number = 10) {

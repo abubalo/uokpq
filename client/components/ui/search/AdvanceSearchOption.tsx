@@ -13,7 +13,7 @@ type Props = {
 const AdvanceSearchOption: React.FC<Props> = ({ showAdvanceOptions }) => {
   const {
     moduleName,
-    taughtBy,
+    taughtBy,  
     department,
     trimester,
     date,

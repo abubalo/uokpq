@@ -2,11 +2,10 @@
 
 import { useEffect, useRef, useState } from "react";
 import { SearchOptions } from "../../shared/Icons";
-import ToolTip from "../Tooltip";
+import { Tooltip } from "../Tooltip";
 import AdvanceSearchOption from "./AdvanceSearchOption";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useSearchStore } from "@/stores/searchStore";
-
 
 const Search: React.FC = () => {
   const [showAdvanceOptions, setShowAdvanceOptions] = useState(false);
@@ -90,15 +89,13 @@ const Search: React.FC = () => {
           </svg>
         </div>
         <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-          <ToolTip text="Show options">
-            <button
-              type="button"
-              className="p-1 text-gray-400 rounded-full hover:text-gray-500 focus:outline-none"
-              onClick={() => setShowAdvanceOptions(true)}
-            >
-              <SearchOptions className="w-5 h-5" />
-            </button>
-          </ToolTip>
+          <button
+            type="button"
+            className="p-1 text-gray-400 rounded-full hover:text-gray-500 focus:outline-none"
+            onClick={() => setShowAdvanceOptions(true)}
+          >
+            <SearchOptions className="w-5 h-5" />
+          </button>
         </div>
       </div>
       <AdvanceSearchOption showAdvanceOptions={showAdvanceOptions} />

@@ -19,7 +19,6 @@ const Providers: React.FC<{
     }
   }, [fetchProfile, initialUser]);
 
-
   return (
     <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
   );

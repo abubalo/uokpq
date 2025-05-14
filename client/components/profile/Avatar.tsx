@@ -1,5 +1,5 @@
-import AvatarImage from "../avatar/AvatarImage";
-import AvatarFallback from "../avatar/AvatarFallback";
+import AvatarImage from "../ui/avatar/AvatarImage";
+import AvatarFallback from "../ui/avatar/AvatarFallback";
 
 type AvatarProps = {
   src: string;
@@ -8,7 +8,7 @@ type AvatarProps = {
   status?: "online" | "offline" | "away";
 };
 
-const Avatar: React.FC<AvatarProps> = ({
+const Avatar_: React.FC<AvatarProps> = ({
   src,
   alt = "",
   size = "md",
@@ -22,4 +22,4 @@ const Avatar: React.FC<AvatarProps> = ({
   );
 };
 
-export default Avatar;
+export default Avatar_;

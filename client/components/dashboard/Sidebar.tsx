@@ -2,7 +2,7 @@ import React from 'react'
 
 const Sidebar = () => {
   return (
-    <aside>Hi there</aside>
+    <aside className='w-1/5'>Hi there</aside>
   )
 }
 

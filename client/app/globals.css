@@ -3,16 +3,59 @@
 @tailwind utilities;
 
 :root {
+  --border: 210, 10%, 90%;
+  --input: 210, 10%, 80%;
+  --ring: 210, 20%, 50%;
+  --background: 210, 10%, 97%;
+  --foreground: 210, 10%, 23%;
+  --primary: 220, 98%, 61%;
+  --primary-foreground: 220, 15%, 15%;
+  --secondary: 340, 82%, 52%;
+  --secondary-foreground: 0, 0%, 100%;
+  --destructive: 0, 82%, 59%;
+  --destructive-foreground: 0, 0%, 100%;
+  --muted: 210, 10%, 40%;
+  --muted-foreground: 210, 15%, 20%;
+  --accent: 50, 100%, 50%;
+  --accent-foreground: 50, 15%, 10%;
+  --popover: 210, 10%, 90%;
+  --popover-foreground: 210, 15%, 20%;
+  --card: 210, 10%, 97%;
+  --card-foreground: 210, 10%, 23%;
+
+  --radius: 8px;
+
   --foreground-rgb: 0, 0, 0;
   --background-rgb: 255, 255, 255;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
+    --border: 210, 10%, 25%;
+    --input: 210, 10%, 30%;
+    --ring: 210, 20%, 50%;
+    --background: 210, 10%, 10%;
+    --foreground: 210, 10%, 90%;
+    --primary: 220, 98%, 61%;
+    --primary-foreground: 210, 10%, 90%;
+    --secondary: 340, 82%, 52%;
+    --secondary-foreground: 210, 10%, 90%;
+    --destructive: 0, 82%, 59%;
+    --destructive-foreground: 210, 10%, 90%;
+    --muted: 210, 10%, 40%;
+    --muted-foreground: 210, 10%, 70%;
+    --accent: 50, 100%, 50%;
+    --accent-foreground: 210, 10%, 90%;
+    --popover: 210, 10%, 25%;
+    --popover-foreground: 210, 10%, 70%;
+    --card: 210, 10%, 15%;
+    --card-foreground: 210, 10%, 70%;
+
     --foreground-rgb: 255, 255, 255;
     --background-rgb: 0, 0, 0;
   }
 }
+
 
 body {
   color: rgb(var(--foreground-rgb));

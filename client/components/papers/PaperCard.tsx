@@ -3,21 +3,28 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 import { FaBookmark, FaRegBookmark } from "react-icons/fa6";
-import ToolTip from "../ui/Tooltip";
-import { useToggleBookmark } from "@/hooks/usePaperQueries";
 import { useAuth } from "@/stores/userStore";
 import { toggleBookmark } from "@/utils/fetchPaperData";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/Tooltip";
+import { urlForImage } from "@/lib/sanity";
+import {formatDate} from "@/lib/utils"
+import { SanityFile } from "@/types/sanity";
 
 type Props = {
   id: string;
-  src: string;
+  src?: SanityFile;
   alt?: string;
   title: string;
-  lecturer: string;
+  lecturer?: string;
   date: number | string;
   url: string;
-  tags: string[];
-  bookmarked: boolean;
+  tags?: string[];
+  bookmarked?: boolean;
 };
 
 const PaperCard: React.FC<Props> = ({
@@ -32,7 +39,6 @@ const PaperCard: React.FC<Props> = ({
   bookmarked,
 }) => {
   const [isBookmarked, setIsBookmarked] = useState(bookmarked);
-  const { mutate: toggleBookmark } = useToggleBookmark();
   const { user } = useAuth();
   const userId = String(user?.id);
 
@@ -52,7 +58,7 @@ const PaperCard: React.FC<Props> = ({
     <div className="relative p-4 border hover:bg-neutral-500/20 border-neutral-400 rounded-lg shadow-md backdrop-blur-md transition-colors dark:hover:bg-neutral-700/20 duration-200">
       <div className="relative w-full h-48">
         <Image
-          src={src}
+          src={src?.asset?.url || ""}
           alt={alt}
           fill
           className="rounded-t-lg object-cover hover:scale-75 duration-200"
@@ -65,11 +71,11 @@ const PaperCard: React.FC<Props> = ({
             Taught by: <span className="font-semibold">{lecturer}</span>
           </p>
           <small className="dark:text-gray-400 font-semibold">
-            Date Taken: {date}
+            Date Taken: {formatDate(date)}
           </small>
         </div>
         <div className="space-x-2">
-          {tags.length > 0
+          {tags && tags.length > 0
             ? tags.map((tag) => (
                 <span
                   key={tag}
@@ -80,19 +86,29 @@ const PaperCard: React.FC<Props> = ({
               ))
             : null}
         </div>
-        <div className="flex justify-end items-center">
-          <ToolTip text={isBookmarked ? "unbookmark" : "bookmark"}>
-            <button onClick={(e) => handleToggleBookmark(e)}>
-              {isBookmarked ? (
-                <FaBookmark className="text-yellow-500" />
-              ) : (
-                <FaRegBookmark />
-              )}
-            </button>
-          </ToolTip>
+        <div className="flex justify-end items-center z-10 relative">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  onClick={(e) => handleToggleBookmark(e)}
+                  className="p-2 hover:bg-neutral-200 dark:hover:bg-neutral-700 rounded-full transition-colors"
+                >
+                  {isBookmarked ? (
+                    <FaBookmark className="text-yellow-500" />
+                  ) : (
+                    <FaRegBookmark />
+                  )}
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>
+                {isBookmarked ? "Remove bookmark" : "Add to bookmarks"}
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       </div>
-      <Link href={`/paper/${url}`} className="absolute inset-0" />
+      <Link href={`/paper/${url}`} className="absolute inset-0 z-0" />
     </div>
   );
 };

@@ -16,7 +16,7 @@ const Header = () => {
   const [darkMode, setDarkMode] = useState(false);
   const [isNavOpen, setIsNavOpen] = useState(false);
 
-  const { user } = useAuth();
+  const { user } = useAuth(); 
 
   const handleNavOpen = () => {
     setIsNavOpen(!isNavOpen);
@@ -69,7 +69,7 @@ const Header = () => {
     },
     {
       label: (
-        <Link href="/bookmaks" className="flex items-center gap-2">
+        <Link href="/bookmarks" className="flex items-center gap-2">
           <FaBookmark /> My Bookmarks
         </Link>
       ),

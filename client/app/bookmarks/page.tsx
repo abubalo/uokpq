@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import Papers from "@/components/papers/Papers";
+import Papers from "@/components/papers/PaperList";
 import { useFetchBookmarks } from "@/hooks/usePaperQueries";
 import { useAuth } from "@/stores/userStore";
 import PaperCardSkeleton from "@/components/papers/PaperCardSkeleton";
